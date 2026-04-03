@@ -1,11 +1,15 @@
 import express from "express";
 import cors from "cors";
-
+import authRoutes from "./routes/authRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
 const app = express();
 
 // 🔹 Middleware
 app.use(cors()); // allow frontend requests
 app.use(express.json()); // parse JSON data
+
+app.use("/api/auth", authRoutes);
+app.use("/api/payment", paymentRoutes);
 
 // 🔹 Test Route
 app.get("/", (req, res) => {

@@ -1,26 +1,32 @@
 import express from "express";
 import cors from "cors";
+
 import authRoutes from "./routes/authRoutes.js";
+import productRoutes from "./routes/productRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
+import earningRoutes from "./routes/earningRoutes.js";
+
 import paymentRoutes from "./routes/paymentRoutes.js";
+
+import path from "path";
+
 const app = express();
+  
+app.use("/uploads", express.static("uploads"));
+app.use(cors());
+app.use(express.json());
 
-// 🔹 Middleware
-app.use(cors()); // allow frontend requests
-app.use(express.json()); // parse JSON data
-
+// routes
 app.use("/api/auth", authRoutes);
-app.use("/api/payment", paymentRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/payments", paymentRoutes);
+app.use("/api/orders", orderRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/earnings", earningRoutes);
 
-// 🔹 Test Route
 app.get("/", (req, res) => {
-  res.send("API is running...");
-});
-
-// 🔹 Example Route (future use)
-app.get("/api/test", (req, res) => {
-  res.json({
-    message: "Backend working successfully 🚀",
-  });
+  res.send("API running...");
 });
 
 export default app;

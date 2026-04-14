@@ -1,67 +1,68 @@
 import { motion } from "framer-motion";
-import { useNavigate, useLocation } from "react-router-dom";
 
-const Navbar = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const links = [
-    { name: "Home", path: "/" },
-    { name: "Shop", path: "/shop" },
-    { name: "Seller", path: "/seller" },
-    { name: "Login", path: "/auth" },
-  ];
-
+export default function Navbar() {
   return (
     <motion.div
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8 }}
-      className="fixed top-0 left-0 w-full z-50"
+      className="sticky top-0 z-50 px-4 md:px-6 mt-4"
     >
-      <div
-        className="mx-6 mt-4 px-8 py-4 flex justify-between items-center 
-        backdrop-blur-xl bg-white/50 border border-white/30 
-        rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.1)]"
-      >
-        {/* 💎 LOGO */}
-        <h1
-          onClick={() => navigate("/")}
-          className="text-2xl font-medium tracking-wide text-[#3a2f2f] cursor-pointer"
-          style={{ fontFamily: "Playfair Display, serif" }}
-        >
-          Kashmir<span className="text-[#c8a97e]">Craft</span>
+      <div className="flex items-center justify-between px-6 py-3 rounded-full backdrop-blur-xl bg-white/30 border border-white/40 shadow-lg">
+        {/* LOGO */}
+        <h1 className="text-xl md:text-2xl font-bold text-[#1F3D2B]">
+          Kashmir<span className="text-[#D4AF37]">Craft</span>
         </h1>
 
-        {/* ✨ NAV LINKS */}
-        <div className="flex gap-8 text-[#3a2f2f] font-light">
-          {links.map((item, i) => {
-            const isActive = location.pathname === item.path;
+        {/* NAV LINKS */}
+        <div className="hidden md:flex items-center gap-8 text-[#1F3D2B] font-medium">
+          <motion.a
+            whileHover={{ scale: 1.1 }}
+            className="relative cursor-pointer group"
+          >
+            Home
+            <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-[#D4AF37] group-hover:w-full transition-all"></span>
+          </motion.a>
 
-            return (
-              <motion.span
-                key={i}
-                whileHover={{ y: -2 }}
-                onClick={() => navigate(item.path)}
-                className="cursor-pointer relative group"
-              >
-                {/* text */}
-                <span className={isActive ? "text-[#c8a97e]" : ""}>
-                  {item.name}
-                </span>
+          <motion.a
+            whileHover={{ scale: 1.1 }}
+            className="relative cursor-pointer group"
+          >
+            Shop
+            <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-[#D4AF37] group-hover:w-full transition-all"></span>
+          </motion.a>
 
-                {/* underline */}
-                <span
-                  className={`absolute left-0 -bottom-1 h-[1px] bg-[#c8a97e] transition-all duration-300 
-                  ${isActive ? "w-full" : "w-0 group-hover:w-full"}`}
-                ></span>
-              </motion.span>
-            );
-          })}
+          <motion.a
+            whileHover={{ scale: 1.1 }}
+            className="relative cursor-pointer group"
+          >
+            Sellers
+            <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-[#D4AF37] group-hover:w-full transition-all"></span>
+          </motion.a>
+
+          <motion.a
+            whileHover={{ scale: 1.1 }}
+            className="relative cursor-pointer group"
+          >
+            Contact
+            <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-[#D4AF37] group-hover:w-full transition-all"></span>
+          </motion.a>
+        </div>
+
+        {/* RIGHT SIDE */}
+        <div className="flex items-center gap-4">
+          {/* LOGIN BUTTON */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            className="hidden md:block px-5 py-2 rounded-full border border-[#1F3D2B] text-[#1F3D2B] hover:bg-[#1F3D2B] hover:text-white transition"
+          >
+            Login
+          </motion.button>
+
+          {/* MOBILE MENU ICON */}
+          <div className="md:hidden text-2xl cursor-pointer">☰</div>
         </div>
       </div>
     </motion.div>
   );
-};
-
-export default Navbar;
+}

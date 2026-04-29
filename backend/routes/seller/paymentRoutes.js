@@ -1,5 +1,5 @@
 import express from "express";
-import { activateSeller } from "../controllers/paymentController.js";
+import { activateSeller } from "../../controllers/seller/paymentController.js";
 
 const router = express.Router();
 

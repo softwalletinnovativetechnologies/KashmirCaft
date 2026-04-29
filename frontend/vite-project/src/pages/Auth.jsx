@@ -11,122 +11,109 @@ const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = async () => {
-    console.log("Clicked ✅");
+  const [loading, setLoading] = useState(false);
 
+  const handleSubmit = async () => {
     if (!email || !password || (!isLogin && !name)) {
       return alert("Please fill all fields");
     }
 
     try {
-      // 🧵 SELLER → PAYMENT FLOW
-      if (role === "seller") {
-        return (window.location.href = "/seller-payment");
-      }
-
-      const payload = { name, email, password, role };
+      setLoading(true);
 
       let res;
 
       if (isLogin) {
         res = await loginUser({ email, password });
 
-        // 🔐 SAVE TOKEN
-        if (res.data.token) {
-          localStorage.setItem("token", res.data.token);
-        }
+        const { token, user } = res.data;
 
-        alert("Login Successful ✅");
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
 
-        // 👉 future: redirect dashboard
-        // window.location.href = "/dashboard";
+        // 🔥 ROLE BASED REDIRECT
+        if (user.role === "admin") window.location.href = "/admin";
+        else if (user.role === "seller")
+          window.location.href = "/seller-dashboard";
+        else window.location.href = "/";
       } else {
-        res = await registerUser(payload);
+        await registerUser({ name, email, password, role });
 
         alert("Registered Successfully ✅");
 
-        // 🔥 AUTO SWITCH TO LOGIN
         setIsLogin(true);
-
-        // 🧹 CLEAR FIELDS
         setName("");
         setEmail("");
         setPassword("");
       }
     } catch (err) {
-      console.error(err);
       alert(err.response?.data?.message || "Server Error");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f8f4f2] relative overflow-hidden">
-      {/* 🌸 BACKGROUND */}
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-[#f5f1eb]">
+      {/* Background */}
       <img
         src={heroBg}
         className="absolute w-full h-full object-cover opacity-30"
       />
+      <div className="absolute w-full h-full bg-[#f5f1eb]/90 backdrop-blur-md"></div>
 
-      <div className="absolute w-full h-full bg-[#f8f4f2]/90 backdrop-blur-sm"></div>
-
-      {/* 💎 CARD */}
+      {/* Card */}
       <motion.div
-        initial={{ opacity: 0, y: 60 }}
+        initial={{ opacity: 0, y: 80 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="relative z-10 w-[350px] md:w-[400px] p-8 
-        backdrop-blur-xl bg-white/70 border border-white/40 
-        rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.1)]"
+        className="relative z-10 w-[360px] md:w-[420px] p-8 
+        bg-white/80 backdrop-blur-2xl border border-white/40 
+        rounded-3xl shadow-2xl"
       >
-        {/* ✨ TITLE */}
-        <h2
-          className="text-3xl text-center mb-6 text-[#2d2424] font-medium"
-          style={{ fontFamily: "Playfair Display, serif" }}
-        >
+        {/* Title */}
+        <h2 className="text-3xl text-center mb-6 font-semibold text-[#2d2424]">
           {isLogin ? "Welcome Back" : "Create Account"}
         </h2>
 
-        {/* 🌸 FORM */}
+        {/* ROLE SELECT (FIXED ✅) */}
+        <div className="flex justify-center gap-3 mb-6">
+          {["buyer", "seller"].map((r) => (
+            <motion.button
+              key={r}
+              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.05 }}
+              onClick={() => setRole(r)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                role === r
+                  ? "bg-gradient-to-r from-[#7F5430] to-[#c8a97e] text-white shadow-md"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              {r.toUpperCase()}
+            </motion.button>
+          ))}
+        </div>
+
+        {/* FORM */}
         <form
           onSubmit={(e) => e.preventDefault()}
           className="flex flex-col gap-4"
         >
-          {/* ROLE */}
-          <div className="flex gap-4 justify-center mb-2">
-            {["buyer", "seller"].map((r) => (
-              <button
-                key={r}
-                type="button"
-                onClick={() => setRole(r)}
-                className={`px-4 py-2 rounded-md border text-sm font-medium transition
-                ${
-                  role === r
-                    ? "bg-[#c8a97e] text-white border-[#c8a97e]"
-                    : "bg-white text-[#3a2f2f] border-gray-300 hover:bg-[#f3e8e4]"
-                }`}
-              >
-                {r.toUpperCase()}
-              </button>
-            ))}
-          </div>
-
-          {/* INPUTS */}
           {!isLogin && (
             <input
-              type="text"
               placeholder="Full Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="px-4 py-3 rounded-md border border-gray-300 bg-white text-[#2d2424] outline-none focus:ring-2 focus:ring-[#c8a97e]"
+              className="px-4 py-3 rounded-xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#c8a97e]"
             />
           )}
 
           <input
-            type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="px-4 py-3 rounded-md border border-gray-300 bg-white text-[#2d2424] outline-none focus:ring-2 focus:ring-[#c8a97e]"
+            className="px-4 py-3 rounded-xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#c8a97e]"
           />
 
           <input
@@ -134,31 +121,29 @@ const Auth = () => {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="px-4 py-3 rounded-md border border-gray-300 bg-white text-[#2d2424] outline-none focus:ring-2 focus:ring-[#c8a97e]"
+            className="px-4 py-3 rounded-xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#c8a97e]"
           />
 
-          {/* 🔥 BUTTON */}
+          {/* BUTTON */}
           <motion.button
+            whileHover={{ scale: loading ? 1 : 1.05 }}
+            whileTap={{ scale: loading ? 1 : 0.95 }}
             type="button"
+            disabled={loading}
             onClick={handleSubmit}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="mt-4 px-6 py-3 bg-[#c8a97e] text-white rounded-md shadow hover:bg-[#b89666] transition"
+            className="mt-4 py-3 rounded-xl text-white font-medium 
+            bg-gradient-to-r from-[#7F5430] to-[#c8a97e] shadow-lg disabled:opacity-50"
           >
-            {role === "seller"
-              ? "Proceed to Payment"
-              : isLogin
-                ? "Login"
-                : "Register"}
+            {loading ? "Processing..." : isLogin ? "Login" : "Register"}
           </motion.button>
         </form>
 
-        {/* 🔁 TOGGLE */}
-        <p className="text-center mt-6 text-sm text-gray-700">
+        {/* SWITCH */}
+        <p className="text-center mt-6 text-sm text-gray-600">
           {isLogin ? "Don't have an account?" : "Already have an account?"}
           <span
             onClick={() => setIsLogin(!isLogin)}
-            className="ml-2 text-[#c8a97e] font-medium cursor-pointer"
+            className="ml-2 text-[#c8a97e] cursor-pointer font-medium hover:underline"
           >
             {isLogin ? "Register" : "Login"}
           </span>

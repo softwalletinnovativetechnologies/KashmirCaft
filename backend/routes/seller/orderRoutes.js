@@ -3,8 +3,8 @@ import {
   createOrder,
   getSellerOrders,
   updateOrderStatus,
-} from "../controllers/orderController.js";
-import { protect } from "../middleware/authMiddleware.js";
+} from "../../controllers/seller/orderController.js";
+import { protect } from "../../middleware/authMiddleware.js";
 
 const router = express.Router();
 

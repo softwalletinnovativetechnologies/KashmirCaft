@@ -1,4 +1,4 @@
-import Order from "../models/Order.js";
+import Order from "../../models/Order.js";
 
 export const getEarnings = async (req, res) => {
   const orders = await Order.find({ seller: req.user.id }).populate("product");

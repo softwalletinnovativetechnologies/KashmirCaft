@@ -4,9 +4,9 @@ import {
   getMyProducts,
   updateProduct,
   deleteProduct,
-} from "../controllers/productController.js";
-import { protect } from "../middleware/authMiddleware.js";
-import upload from "../middleware/upload.js";
+} from "../../controllers/seller/productController.js";
+import { protect } from "../../middleware/authMiddleware.js";
+import upload from "../../middleware/upload.js";
 
 const router = express.Router();
 

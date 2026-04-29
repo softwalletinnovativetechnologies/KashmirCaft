@@ -1,173 +1,270 @@
 import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-fade";
 import { Autoplay, EffectFade } from "swiper/modules";
 
 export default function Home() {
+  const slides = ["/1im.png", "/2im.png", "/3im.png"];
+ const navigate = useNavigate();
+  const features = [
+    { icon: "✨", title: "Authentic Products", sub: "100% Original Handmade" },
+    { icon: "🤝", title: "Support Artisans", sub: "Empowering Kashmir Crafts" },
+    { icon: "🔒", title: "Secure Payments", sub: "Trusted Checkout" },
+    { icon: "🚚", title: "Fast Delivery", sub: "Across India" },
+  ];
+
+  const products = [
+    { img: "/1im.png", name: "Pashmina Shawl", price: "₹4,999" },
+    { img: "/2im.png", name: "Dry Fruits Box", price: "₹1,999" },
+    { img: "/3im.png", name: "Kashmiri Carpet", price: "₹12,999" },
+  ];
+
+
   return (
-    <div className="relative min-h-screen overflow-hidden">
-      {/* 🌸 BACKGROUND */}
+    <div className="relative min-h-screen overflow-hidden bg-[#edf2ee]">
+      {/* Background */}
       <div
         className="fixed inset-0 bg-cover bg-center z-[-3]"
         style={{ backgroundImage: "url('/bgw.png')" }}
       />
-
-      {/* ✨ ANIMATED OVERLAY */}
-      <div className="fixed inset-0 z-[-2] bg-gradient-to-r from-green-200/30 via-white/20 to-purple-200/30 animate-pulse" />
+      <div className="fixed inset-0 bg-white/30 z-[-2]" />
 
       <Navbar />
 
-      {/* 🌿 GLASS WRAPPER */}
-      <div className="mx-4 md:mx-6 mt-4 rounded-[40px] backdrop-blur-xl bg-white/20 border border-white/30 shadow-[0_8px_40px_rgba(0,0,0,0.2)] overflow-hidden">
-        {/* 🌄 HERO */}
-        <section className="relative h-[95vh]">
+      <div className="mx-3 md:mx-6 mt-4 rounded-[34px] overflow-hidden bg-white/20 backdrop-blur-xl border border-white/40 shadow-[0_20px_70px_rgba(0,0,0,0.12)]">
+        {/* ================================================= HERO ================================================= */}
+        <section className="relative h-[100vh] overflow-hidden">
           <Swiper
             modules={[Autoplay, EffectFade]}
             effect="fade"
-            autoplay={{ delay: 3000, disableOnInteraction: false }}
             loop
-            speed={1200}
+            speed={1600}
+            autoplay={{
+              delay: 4000,
+              disableOnInteraction: false,
+            }}
             className="h-full"
           >
-            {/* VIDEO */}
-            <SwiperSlide>
-              <video
-                src="https://cdn.coverr.co/videos/coverr-mountains-and-lake-1575/1080p.mp4"
-                autoPlay
-                muted
-                loop
-                className="w-full h-full object-cover"
-              />
-            </SwiperSlide>
-
-            {/* IMAGES */}
-            {[
-              "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf",
-              "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b",
-              "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
-            ].map((img, i) => (
+            {slides.map((img, i) => (
               <SwiperSlide key={i}>
                 <img
                   src={img}
-                  className="w-full h-full object-cover scale-110 transition duration-[6000ms]"
+                  className="h-full w-full object-cover scale-105"
                 />
               </SwiperSlide>
             ))}
           </Swiper>
 
-          {/* DARK OVERLAY */}
-          <div className="absolute inset-0 bg-black/40" />
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/40 to-black/10 z-10" />
 
-          {/* HERO TEXT */}
-          <div className="absolute inset-0 flex flex-col justify-center px-6 md:px-16 text-white">
-            <motion.h1
-              initial={{ opacity: 0, y: 80 }}
-              animate={{ opacity: 1, y: 0 }}
+          {/* Hero Content */}
+          <div className="absolute inset-0 z-20 flex items-center px-6 md:px-14 lg:px-24">
+            <motion.div
+              initial={{ opacity: 0, x: -80 }}
+              animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1 }}
-              className="text-4xl md:text-6xl font-bold max-w-2xl"
+              className="max-w-2xl -mt-10 md:-mt-16"
             >
-              Discover Authentic Kashmiri Products
-            </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, y: -15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="uppercase tracking-[7px] text-[#f6d28b] text-xs md:text-sm font-semibold mb-4"
+              >
+                Luxury Kashmir Marketplace
+              </motion.p>
 
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="mt-4 text-gray-200 max-w-md"
-            >
-              Luxury handcrafted elegance from Kashmir.
-            </motion.p>
+              <motion.h1
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+                className="leading-[1.02]"
+              >
+                <motion.span
+                  animate={{ y: [0, -6, 0] }}
+                  transition={{ repeat: Infinity, duration: 4 }}
+                  className="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif italic text-white drop-shadow-2xl"
+                >
+                  Authentic
+                </motion.span>
 
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              className="mt-6 px-6 py-3 bg-[#D4AF37] text-black rounded-xl shadow-lg"
-            >
-              Shop Now
-            </motion.button>
-          </div>
+                <motion.span
+                  animate={{ opacity: [0.8, 1, 0.8] }}
+                  transition={{ repeat: Infinity, duration: 3 }}
+                  className="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif bg-gradient-to-r from-white via-[#ffe3a2] to-white bg-clip-text text-transparent"
+                >
+                  Kashmir Shawls
+                </motion.span>
+              </motion.h1>
 
-          {/* 🔍 SEARCH BAR */}
-          <div className="absolute bottom-[-40px] w-full flex justify-center px-4 z-20">
-            <div className="backdrop-blur-xl bg-white/30 border border-white/40 shadow-2xl rounded-full px-4 md:px-6 py-3 flex items-center gap-3 w-full md:w-[55%]">
-              <input
-                type="text"
-                placeholder="Search Kashmiri products..."
-                className="flex-1 bg-transparent outline-none text-white placeholder-white"
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: "170px" }}
+                transition={{ delay: 0.8 }}
+                className="h-[3px] bg-gradient-to-r from-[#f6d28b] to-transparent rounded-full mt-5 mb-5"
               />
 
-              <button className="bg-[#1F3D2B] text-white px-6 py-2 rounded-full hover:scale-105 transition">
-                Search
-              </button>
-            </div>
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1 }}
+                className="text-sm md:text-lg text-gray-100 leading-relaxed max-w-xl"
+              >
+                Woven with tradition, crafted with timeless elegance from the
+                valleys of Kashmir.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 25 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.2 }}
+                className="flex flex-wrap gap-4 mt-8"
+              >
+                <button
+  onClick={() => navigate("/shop")}
+  className="px-8 py-4 rounded-xl bg-gradient-to-r from-[#8b3a16] to-[#5c220c] text-white font-semibold hover:scale-105 transition duration-300 shadow-xl"
+>
+  Explore Collection
+</button>
+
+                <button
+  onClick={() => navigate("/shop")}
+  className="px-8 py-4 rounded-xl border border-white/70 text-white hover:bg-white hover:text-black transition duration-300"
+>
+  Shop Now
+</button>
+              </motion.div>
+            </motion.div>
           </div>
         </section>
 
-        {/* 🏡 FEATURE SECTION */}
-        <section className="mt-24 px-6 md:px-12 py-16">
-          <div className="grid md:grid-cols-2 gap-10 items-center">
+        {/* ================= STRIP HERO + ABOUT KE BEECH ================= */}
+        <div className="relative z-30 px-4 md:px-8 -mt-10 md:-mt-12">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="mx-auto max-w-7xl rounded-[26px] bg-white/95 backdrop-blur-xl border border-white/70 shadow-[0_20px_45px_rgba(0,0,0,0.12)] px-4 md:px-6 py-4"
+          >
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-0">
+              {features.map((item, i) => (
+                <motion.div
+                  key={i}
+                  whileHover={{ y: -6, scale: 1.02 }}
+                  transition={{ type: "spring", stiffness: 260 }}
+                  className="flex items-center gap-3 px-2 md:px-4 py-2 md:border-r last:border-r-0 border-gray-200 rounded-xl hover:bg-[#fafafa]"
+                >
+                  <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-[#fff7df] to-[#f5ead1] flex items-center justify-center text-sm shadow">
+                    {item.icon}
+                  </div>
+
+                  <div>
+                    <h4 className="text-xs md:text-sm font-semibold text-[#173a2a] leading-tight">
+                      {item.title}
+                    </h4>
+
+                    <p className="text-[10px] md:text-xs text-gray-500 leading-tight">
+                      {item.sub}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+
+        {/* ================================================= ABOUT ================================================= */}
+        <section className="mt-16 px-6 md:px-12 py-20">
+          <div className="grid md:grid-cols-2 gap-14 items-center">
             <motion.div
-              initial={{ opacity: 0, x: -80 }}
+              initial={{ opacity: 0, x: -70 }}
               whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
               className="relative"
             >
               <img
-                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c"
-                className="rounded-2xl shadow-xl"
+                src="/2im.png"
+                className="rounded-3xl h-[430px] w-full object-cover shadow-xl"
               />
 
               <img
-                src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b"
-                className="absolute bottom-[-30px] left-6 w-40 md:w-60 rounded-2xl shadow-xl border-4 border-white"
+                src="/3im.png"
+                className="absolute -bottom-8 left-8 w-48 rounded-3xl border-4 border-white shadow-xl"
               />
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, x: 80 }}
+              initial={{ opacity: 0, x: 70 }}
               whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
             >
-              <h2 className="text-3xl md:text-4xl font-semibold text-[#1F3D2B]">
-                Authentic Kashmiri Craftsmanship
-              </h2>
-
-              <p className="mt-4 text-gray-700">
-                Every product reflects tradition and luxury.
+              <p className="uppercase tracking-[4px] text-[#7a3114] text-sm mb-3">
+                Heritage Craft
               </p>
 
-              <button className="mt-6 px-6 py-3 border border-[#1F3D2B] rounded-xl hover:bg-[#1F3D2B] hover:text-white transition">
+              <h2 className="text-4xl md:text-5xl font-serif text-[#173a2a] leading-tight">
+                Crafted by Kashmiri Artisans
+              </h2>
+
+              <p className="mt-5 text-gray-700 text-lg leading-relaxed">
+                Discover authentic products made with passion, heritage and
+                generations of craftsmanship.
+              </p>
+
+              <button 
+              onClick={() => navigate("/shop")}
+              className="mt-8 px-7 py-3 rounded-full bg-[#173a2a] text-white hover:bg-black transition">
                 Explore Collection
               </button>
             </motion.div>
           </div>
         </section>
 
-        {/* 🛍️ PRODUCTS */}
+        {/* ================================================= PRODUCTS ================================================= */}
         <section className="px-6 md:px-12 pb-20">
-          <h2 className="text-3xl font-semibold mb-10 text-[#1F3D2B]">
-            Featured Products
-          </h2>
+          <div className="flex justify-between items-center mb-10">
+            <h2 className="text-3xl md:text-4xl font-serif text-[#173a2a]">
+              Featured Products
+            </h2>
 
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {[1, 2, 3].map((i) => (
+            <button 
+            onClick={() => navigate("/shop")}
+            className="text-[#7a3114] font-medium hover:underline">
+              View All
+            </button>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {products.map((item, index) => (
               <motion.div
-                key={i}
-                whileHover={{ scale: 1.05 }}
+                key={index}
+                whileHover={{ y: -10 }}
                 initial={{ opacity: 0, y: 60 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                className="bg-white/60 backdrop-blur-md rounded-2xl overflow-hidden shadow-md"
+                transition={{ duration: 0.5 }}
+                className="rounded-3xl overflow-hidden bg-white/80 backdrop-blur-xl shadow-lg group"
               >
-                <img
-                  src="https://images.unsplash.com/photo-1593032465171-8f6d8c3c6b7d"
-                  className="h-52 w-full object-cover"
-                />
+                <div className="overflow-hidden">
+                  <img
+                    src={item.img}
+                    className="h-64 w-full object-cover group-hover:scale-110 transition duration-500"
+                  />
+                </div>
 
-                <div className="p-5">
-                  <h3 className="font-semibold">Pashmina Shawl</h3>
-                  <p className="text-[#D4AF37] font-medium">₹4,999</p>
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold text-[#173a2a]">
+                    {item.name}
+                  </h3>
 
-                  <button className="mt-3 w-full bg-[#1F3D2B] text-white py-2 rounded-xl">
+                  <p className="text-[#D4AF37] font-bold text-lg mt-2">
+                    {item.price}
+                  </p>
+
+                  <button className="mt-5 w-full py-3 rounded-full bg-[#173a2a] text-white hover:bg-black transition">
                     Add to Cart
                   </button>
                 </div>
@@ -176,42 +273,63 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 🌄 BANNER */}
-        <section className="mx-6 mb-20 rounded-3xl overflow-hidden relative h-[50vh]">
+        {/* ================================================= BANNER ================================================= */}
+        <section className="mx-6 mb-20 rounded-[34px] overflow-hidden relative h-[55vh]">
           <img
-            src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee"
-            className="absolute w-full h-full object-cover"
+            src="/1im.png"
+            className="absolute inset-0 h-full w-full object-cover"
           />
 
-          <div className="absolute inset-0 bg-black/50" />
+          <div className="absolute inset-0 bg-black/45" />
 
-          <div className="relative flex flex-col justify-center items-center h-full text-white text-center">
-            <h2 className="text-4xl font-semibold">
+          <div className="relative z-10 h-full flex flex-col justify-center items-center text-center px-4 text-white">
+            <h2 className="text-4xl md:text-5xl font-serif max-w-3xl leading-tight">
               Experience Kashmir Like Never Before
             </h2>
 
-            <button className="mt-4 px-6 py-2 bg-[#D4AF37] text-black rounded-xl">
+            <p className="mt-4 text-lg text-gray-200">
+              Luxury, heritage and beauty in every order.
+            </p>
+
+            <button 
+            onClick={() => navigate("/shop")}
+            className="mt-7 px-8 py-3 bg-[#D4AF37] text-black rounded-full hover:scale-105 transition">
               Explore Now
             </button>
           </div>
         </section>
 
-        {/* 💌 NEWSLETTER */}
-        <section className="py-20 text-center bg-white/40 backdrop-blur-md">
-          <h2 className="text-3xl font-semibold text-[#1F3D2B]">
+        {/* ================================================= NEWSLETTER ================================================= */}
+        <section className="py-20 px-6 text-center bg-white/35 backdrop-blur-md">
+          <p className="uppercase tracking-[4px] text-sm text-[#7a3114]">
+            Stay Updated
+          </p>
+
+          <h2 className="text-4xl font-serif text-[#173a2a] mt-3">
             Join Our Community
           </h2>
 
-          <input
-            type="email"
-            placeholder="Enter your email"
-            className="mt-6 px-5 py-3 rounded-full border w-72 outline-none"
-          />
+          <p className="text-gray-600 mt-4 max-w-xl mx-auto">
+            Get latest arrivals, offers and Kashmir collections directly in your
+            inbox.
+          </p>
+
+          <div className="mt-8 flex flex-col md:flex-row gap-4 justify-center items-center">
+            <input
+              type="email"
+              placeholder="Enter your email"
+              className="px-6 py-4 rounded-full w-full md:w-[420px] outline-none border border-gray-200"
+            />
+
+            <button className="px-8 py-4 rounded-full bg-[#173a2a] text-white hover:bg-black transition">
+              Subscribe
+            </button>
+          </div>
         </section>
 
         {/* FOOTER */}
-        <footer className="py-6 text-center text-gray-600">
-          © KashmirCraft Marketplace
+        <footer className="py-7 text-center text-gray-600 bg-white/20">
+          © 2026 KashmirCraft Marketplace. All rights reserved.
         </footer>
       </div>
     </div>

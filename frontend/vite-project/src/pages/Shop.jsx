@@ -1,116 +1,167 @@
-import { motion } from "framer-motion";
 import Navbar from "../components/Navbar";
+import { motion } from "framer-motion";
+import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 
-const products = [
+const PRODUCTS = [
   {
+    id: 1,
     name: "Pashmina Shawl",
-    price: "₹4,999",
-    img: "https://images.unsplash.com/photo-1618354691373-d851c5c3a990",
+    price: 4999,
+    category: "Pashmina",
+    img: "https://images.unsplash.com/photo-1593032465171-8f6d8c3c6b7d",
   },
   {
+    id: 2,
     name: "Kashmiri Carpet",
-    price: "₹12,999",
+    price: 12999,
+    category: "Carpets",
     img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
   },
   {
-    name: "Walnut Wood Handicraft",
-    price: "₹3,499",
-    img: "https://images.unsplash.com/photo-1585386959984-a4155224a1ad",
-  },
-  {
-    name: "Dry Fruits Box",
-    price: "₹1,299",
+    id: 3,
+    name: "Walnuts Premium",
+    price: 1299,
+    category: "Dry Fruits",
     img: "https://images.unsplash.com/photo-1604908176997-431b7d2f9a76",
   },
   {
-    name: "Kashmir Saffron",
-    price: "₹899",
-    img: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5",
-  },
-  {
-    name: "Traditional Kangri",
-    price: "₹2,199",
-    img: "https://images.unsplash.com/photo-1598300056393-4aac492f4344",
+    id: 4,
+    name: "Handicraft Decor",
+    price: 2499,
+    category: "Handicrafts",
+    img: "https://images.unsplash.com/photo-1585386959984-a4155224a1ad",
   },
 ];
 
-const Shop = () => {
+const CATEGORIES = ["All", "Pashmina", "Carpets", "Dry Fruits", "Handicrafts"];
+
+export default function Shop() {
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("All");
+  const navigate = useNavigate();
+
+  const filtered = useMemo(() => {
+    return PRODUCTS.filter((p) => {
+      const matchCategory = category === "All" || p.category === category;
+      const matchSearch = p.name.toLowerCase().includes(search.toLowerCase());
+      return matchCategory && matchSearch;
+    });
+  }, [search, category]);
+
   return (
-    <div className="bg-[#f8f4f2] min-h-screen text-[#3a2f2f] overflow-x-hidden">
+    <div className="relative min-h-screen">
+      {/* 🌸 BACKGROUND */}
+      <div
+        className="fixed inset-0 bg-cover bg-center z-[-2]"
+        style={{ backgroundImage: "url('/bgw.png')" }}
+      />
+      <div className="fixed inset-0 bg-white/20 backdrop-blur-md z-[-1]" />
+
       <Navbar />
 
-      {/* 🌸 HERO */}
-      <section className="pt-32 pb-16 text-center">
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-5xl font-light"
-          style={{ fontFamily: "Playfair Display, serif" }}
-        >
-          Explore{" "}
-          <span className="text-[#c8a97e] font-medium">Kashmir Collection</span>
-        </motion.h1>
+      {/* 🌿 MAIN */}
+      <div className="mx-4 md:mx-8 mt-6 p-8 rounded-[32px] bg-gradient-to-br from-[#EEF2EC]/90 to-[#F3F1EA]/90 shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
+        {/* 🔥 HEADER */}
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-12">
+          <div>
+            <h1 className="text-4xl font-bold text-[#32758b]">
+              Shop Kashmiri Products
+            </h1>
+            <p className="text-gray-600 mt-2">
+              Explore authentic handcrafted luxury
+            </p>
+          </div>
 
-        <p className="mt-4 text-gray-600">
-          Authentic handcrafted luxury from Kashmir
-        </p>
-      </section>
-
-      {/* 🛍️ PRODUCTS GRID */}
-      <section className="px-10 pb-20">
-        <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {products.map((item, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              whileHover={{ y: -8 }}
-              className="bg-white/70 backdrop-blur-lg border border-white/30 
-              rounded-xl overflow-hidden shadow-md hover:shadow-xl transition"
-            >
-              {/* IMAGE */}
-              <div className="overflow-hidden">
-                <img
-                  src={item.img}
-                  className="w-full h-56 object-cover hover:scale-110 transition duration-500"
-                />
-              </div>
-
-              {/* CONTENT */}
-              <div className="p-4 text-center">
-                <h3 className="text-lg font-medium">{item.name}</h3>
-                <p className="text-[#c8a97e] mt-1 font-medium">{item.price}</p>
-
-                {/* BUTTON */}
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  className="mt-4 px-4 py-2 bg-[#c8a97e] text-white rounded shadow hover:bg-[#b89666]"
-                >
-                  Add to Cart
-                </motion.button>
-              </div>
-            </motion.div>
-          ))}
+          {/* 🔍 SEARCH */}
+          <div className="flex items-center bg-white/90 shadow-lg rounded-full px-5 py-3 w-full lg:w-[400px]">
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search products..."
+              className="flex-1 outline-none bg-transparent"
+            />
+            <button className="bg-[#32758b] text-white px-5 py-2 rounded-full hover:scale-105 transition">
+              Search
+            </button>
+          </div>
         </div>
-      </section>
 
-      {/* 🌸 CTA SECTION */}
-      <section className="text-center py-16 bg-[#f3e8e4]">
-        <h2
-          className="text-3xl font-light"
-          style={{ fontFamily: "Playfair Display, serif" }}
-        >
-          Discover the{" "}
-          <span className="text-[#c8a97e] font-medium">Essence of Kashmir</span>
-        </h2>
+        {/* 🧱 LAYOUT */}
+        <div className="grid lg:grid-cols-4 gap-10">
+          {/* 🧾 SIDEBAR */}
+          <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-md h-fit">
+            <h2 className="font-semibold text-lg text-[#32758b] mb-4">
+              Categories
+            </h2>
 
-        <p className="mt-3 text-gray-600">
-          Timeless elegance crafted with tradition & love
-        </p>
-      </section>
+            <div className="space-y-2">
+              {CATEGORIES.map((c) => (
+                <button
+                  key={c}
+                  onClick={() => setCategory(c)}
+                  className={`block text-left w-full px-4 py-2 rounded-xl transition-all duration-300 font-medium
+                  ${
+                    category === c
+                      ? "bg-[#32758b] text-white shadow-md"
+                      : "text-[#32758b] hover:bg-[#EEF2EC] hover:pl-5"
+                  }`}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 🛍️ PRODUCTS */}
+          <div className="lg:col-span-3 grid sm:grid-cols-2 xl:grid-cols-3 gap-8">
+            {filtered.map((item) => (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                whileHover={{ y: -12, scale: 1.04 }}
+                transition={{ duration: 0.4 }}
+                onClick={() => navigate(`/product/${item.id}`)}
+                className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all cursor-pointer group"
+              >
+                {/* IMAGE */}
+                <div className="overflow-hidden relative">
+                  <img
+                    src={item.img}
+                    className="h-56 w-full object-cover group-hover:scale-110 transition duration-500"
+                  />
+
+                  {/* PREMIUM OVERLAY */}
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition" />
+                </div>
+
+                {/* CONTENT */}
+                <div className="p-5">
+                  <h3 className="font-semibold text-[#32758b] text-lg">
+                    {item.name}
+                  </h3>
+
+                  <p className="text-[#D4AF37] font-bold mt-1 text-lg">
+                    ₹{item.price}
+                  </p>
+
+                  {/* BUTTON */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      alert("Added to cart");
+                    }}
+                    className="mt-4 w-full bg-[#32758b] text-white py-2 rounded-lg hover:bg-black transition"
+                  >
+                    Add to Cart
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
-};
-
-export default Shop;
+}

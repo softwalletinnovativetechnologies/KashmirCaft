@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
+import API from "../services/api";
 import { motion, AnimatePresence } from "framer-motion";
-
+import { useNavigate } from "react-router-dom";
 export default function Profile() {
   const [user, setUser] = useState(null);
-  const [editing, setEditing] = useState(false);
+  const [orders, setOrders] = useState([]);
+  const [addresses, setAddresses] = useState([]);
 
-  const [profile, setProfile] = useState({
+  const [editing, setEditing] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const [editId, setEditId] = useState(null);
+  const navigate = useNavigate();
+  const [profileData, setProfileData] = useState({
     name: "",
     email: "",
   });
-
-  const [addresses, setAddresses] = useState([]);
-  const [orders, setOrders] = useState([]);
-
-  const [showForm, setShowForm] = useState(false);
-  const [editIndex, setEditIndex] = useState(null);
 
   const [form, setForm] = useState({
     fullName: "",
@@ -23,67 +23,105 @@ export default function Profile() {
     city: "",
     state: "",
     pincode: "",
-    isDefault: false,
   });
 
   useEffect(() => {
-    const u = JSON.parse(localStorage.getItem("user"));
-    setUser(u);
-
-    if (u) {
-      setProfile({
-        name: u.name,
-        email: u.email,
-      });
-    }
-
-    setAddresses(JSON.parse(localStorage.getItem("addresses")) || []);
-
-    // 🔥 dummy orders (later backend)
-    setOrders([
-      {
-        id: "ORD123",
-        date: "12 Apr 2026",
-        status: "Delivered",
-        total: "₹2,499",
-        items: ["Pashmina Shawl", "Dry Fruits Box"],
-      },
-      {
-        id: "ORD456",
-        date: "20 Apr 2026",
-        status: "Processing",
-        total: "₹899",
-        items: ["Kashmiri Kahwa"],
-      },
-    ]);
+    loadUser();
+    fetchAll();
   }, []);
 
-  const saveProfile = () => {
-    const updated = { ...user, name: profile.name };
-    localStorage.setItem("user", JSON.stringify(updated));
-    setUser(updated);
-    setEditing(false);
+  const loadUser = () => {
+    const localUser = JSON.parse(localStorage.getItem("user"));
+
+    if (localUser) {
+      setUser(localUser);
+      setProfileData({
+        name: localUser.name || "",
+        email: localUser.email || "",
+      });
+    }
   };
 
-  const saveAddress = () => {
-    let updated = [...addresses];
+  const fetchAll = async () => {
+    try {
+      const res = await API.get("/user/profile");
+      const userData = res.data.user || res.data;
 
-    if (form.isDefault) {
-      updated = updated.map((a) => ({ ...a, isDefault: false }));
+      setUser(userData);
+      setProfileData({
+        name: userData.name || "",
+        email: userData.email || "",
+      });
+
+      // 🔥 orders safe
+      try {
+        const orderRes = await API.get("/user/orders");
+        setOrders(orderRes.data || []);
+      } catch {
+        setOrders([]);
+      }
+
+      // 🔥 ADDRESS FIX (IMPORTANT)
+      try {
+        const addrRes = await API.get("/user/addresses");
+
+        console.log("ADDRESS RESPONSE:", addrRes.data);
+
+        let addressData = [];
+
+        if (Array.isArray(addrRes.data)) {
+          addressData = addrRes.data;
+        } else if (Array.isArray(addrRes.data.addresses)) {
+          addressData = addrRes.data.addresses;
+        }
+
+        setAddresses(addressData);
+      } catch (err) {
+        console.log("ADDRESS ERROR:", err);
+        setAddresses([]);
+      }
+    } catch (err) {
+      console.log("API ERROR:", err.response?.data || err.message);
     }
+  };
 
-    if (editIndex !== null) {
-      updated[editIndex] = form;
-    } else {
-      updated.push(form);
+  const updateProfile = async () => {
+    try {
+      await API.put("/user/profile", profileData);
+      localStorage.setItem("user", JSON.stringify(profileData));
+      setEditing(false);
+      fetchAll();
+    } catch (err) {
+      console.log(err);
     }
+  };
 
-    setAddresses(updated);
-    localStorage.setItem("addresses", JSON.stringify(updated));
+  const handleSubmit = async () => {
+    try {
+      if (editId) {
+        await API.put(`/user/addresses/${editId}`, form);
+      } else {
+        await API.post("/user/addresses", form);
+      }
 
-    setShowForm(false);
-    setEditIndex(null);
-    resetForm();
+      resetForm();
+      setShowForm(false);
+      setEditId(null);
+      fetchAll();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const deleteAddress = async (id) => {
+    await API.delete(`/user/addresses/${id}`);
+    fetchAll();
+  };
+
+  const editAddress = (addr) => {
+    setForm(addr);
+    setEditId(addr._id);
+    setShowForm(true);
   };
 
   const resetForm = () => {
@@ -94,37 +132,44 @@ export default function Profile() {
       city: "",
       state: "",
       pincode: "",
-      isDefault: false,
     });
   };
 
   return (
     <div className="min-h-screen bg-[#f6f3ef] p-6 text-gray-900">
       <div className="max-w-6xl mx-auto space-y-6">
+        <button
+          onClick={() => navigate("/")}
+          className="px-4 py-2 bg-white shadow rounded-lg border hover:bg-gray-50 transition text-[#7F5430]"
+        >
+          ← Back to Home
+        </button>
         {/* PROFILE */}
-        <div className="bg-white rounded-2xl shadow p-6 flex items-center gap-6">
+        <div className="bg-white p-6 rounded-2xl shadow flex items-center gap-5">
           <div className="w-16 h-16 bg-[#c8a97e] text-white rounded-full flex items-center justify-center text-xl">
-            {user?.name?.charAt(0)}
+            {profileData.name?.charAt(0) || "U"}
           </div>
 
-          <div className="flex-1">
+          <div className="flex-1 space-y-2">
             <input
               disabled={!editing}
-              value={profile.name}
-              onChange={(e) => setProfile({ ...profile, name: e.target.value })}
-              className="w-full border p-2 rounded-md text-gray-900 bg-white"
+              value={profileData.name}
+              onChange={(e) =>
+                setProfileData({ ...profileData, name: e.target.value })
+              }
+              className="w-full border p-2 rounded text-gray-900 bg-white"
             />
 
             <input
               disabled
-              value={profile.email}
-              className="w-full mt-2 border p-2 rounded-md bg-gray-100 text-gray-900"
+              value={profileData.email}
+              className="w-full border p-2 rounded bg-gray-100 text-gray-900"
             />
           </div>
 
           {editing ? (
             <button
-              onClick={saveProfile}
+              onClick={updateProfile}
               className="bg-[#7F5430] text-white px-4 py-2 rounded"
             >
               Save
@@ -139,54 +184,74 @@ export default function Profile() {
           )}
         </div>
 
-        {/* ORDERS */}
-        <div className="bg-white rounded-2xl shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">My Orders</h2>
-
-          <div className="space-y-4">
-            {orders.map((o) => (
-              <div
-                key={o.id}
-                className="border rounded-xl p-4 flex justify-between"
-              >
-                <div>
-                  <p className="font-medium">{o.id}</p>
-                  <p className="text-sm text-gray-600">{o.date}</p>
-                  <p className="text-sm">{o.items.join(", ")}</p>
-                </div>
-
-                <div className="text-right">
-                  <p className="font-semibold">{o.total}</p>
-                  <span
-                    className={`text-sm px-2 py-1 rounded ${
-                      o.status === "Delivered"
-                        ? "bg-green-100 text-green-700"
-                        : "bg-yellow-100 text-yellow-700"
-                    }`}
-                  >
-                    {o.status}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
         {/* ADDRESSES */}
-        <div className="bg-white rounded-2xl shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">My Addresses</h2>
+        <div className="bg-white p-6 rounded-2xl shadow">
+          <div className="flex justify-between">
+            <h2 className="text-xl font-semibold">My Addresses</h2>
 
-          <div className="grid gap-4">
-            {addresses.map((a, i) => (
-              <div key={i} className="border p-4 rounded-xl">
-                <p>{a.fullName}</p>
-                <p className="text-sm text-gray-600">
-                  {a.address}, {a.city}
-                </p>
-              </div>
-            ))}
+            <button
+              onClick={() => {
+                resetForm();
+                setEditId(null);
+                setShowForm(true);
+              }}
+              className="bg-[#315765] text-white px-4 py-2 rounded"
+            >
+              + Add
+            </button>
           </div>
+
+          {addresses.length === 0 ? (
+            <p className="text-gray-500 mt-4">No address added</p>
+          ) : (
+            <div className="mt-4 space-y-3">
+              {addresses.map((a) => (
+                <div
+                  key={a._id}
+                  className="border p-4 rounded flex justify-between"
+                >
+                  <div>
+                    <p className="font-medium">{a.fullName}</p>
+                    <p className="text-sm">
+                      {a.address}, {a.city}
+                    </p>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <button onClick={() => editAddress(a)}>Edit</button>
+                    <button onClick={() => deleteAddress(a._id)}>Delete</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
+
+        {/* MODAL */}
+        <AnimatePresence>
+          {showForm && (
+            <motion.div className="fixed inset-0 bg-black/40 flex justify-center items-center">
+              <div className="bg-white p-6 rounded w-[300px] space-y-3">
+                {Object.keys(form).map((f) => (
+                  <input
+                    key={f}
+                    value={form[f]}
+                    placeholder={f}
+                    className="w-full border p-2 rounded"
+                    onChange={(e) => setForm({ ...form, [f]: e.target.value })}
+                  />
+                ))}
+
+                <button
+                  onClick={handleSubmit}
+                  className="bg-[#7F5430] text-white w-full py-2 rounded"
+                >
+                  Save
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

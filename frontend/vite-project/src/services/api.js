@@ -4,8 +4,22 @@ const API = axios.create({
   baseURL: "http://localhost:5000/api",
 });
 
+// 🔐 TOKEN AUTO ATTACH (VERY IMPORTANT)
+API.interceptors.request.use((req) => {
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    req.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return req;
+});
+
 // REGISTER
 export const registerUser = (data) => API.post("/auth/register", data);
 
 // LOGIN
 export const loginUser = (data) => API.post("/auth/login", data);
+
+// ✅ THIS LINE ADD KAR (IMPORTANT)
+export default API;

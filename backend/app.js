@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 
 import authRoutes from "./routes/authRoutes.js";
+import userAddressRoutes from "./routes/user/addressRoutes.js";
+import userProfileRoutes from "./routes/user/profileRoutes.js";
 
 // seller routes
 import sellerProductRoutes from "./routes/seller/productRoutes.js";
@@ -27,7 +29,9 @@ app.use(express.json());
 
 // ================= AUTH =================
 app.use("/api/auth", authRoutes);
+app.use("/api/user/addresses", userAddressRoutes);
 
+app.use("/api/user/profile", userProfileRoutes);
 // ================= SELLER =================
 app.use("/api/seller/products", protect, sellerProductRoutes);
 app.use("/api/seller/orders", protect, sellerOrderRoutes);

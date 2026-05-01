@@ -1,158 +1,125 @@
 import Navbar from "../components/Navbar";
 import { motion } from "framer-motion";
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-
-const PRODUCTS = [
-  {
-    id: 1,
-    name: "Pashmina Shawl",
-    price: 4999,
-    category: "Pashmina",
-    img: "https://images.unsplash.com/photo-1593032465171-8f6d8c3c6b7d",
-  },
-  {
-    id: 2,
-    name: "Kashmiri Carpet",
-    price: 12999,
-    category: "Carpets",
-    img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
-  },
-  {
-    id: 3,
-    name: "Walnuts Premium",
-    price: 1299,
-    category: "Dry Fruits",
-    img: "https://images.unsplash.com/photo-1604908176997-431b7d2f9a76",
-  },
-  {
-    id: 4,
-    name: "Handicraft Decor",
-    price: 2499,
-    category: "Handicrafts",
-    img: "https://images.unsplash.com/photo-1585386959984-a4155224a1ad",
-  },
-];
+import axios from "axios";
+import LoginPopup from "../components/LoginPopup";
 
 const CATEGORIES = ["All", "Pashmina", "Carpets", "Dry Fruits", "Handicrafts"];
+const normalize = (str) => (str || "").toLowerCase().replace(/\s+/g, "");
 
 export default function Shop() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
+  const [price, setPrice] = useState(100000);
+  const [products, setProducts] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
+
   const navigate = useNavigate();
 
+  const isLoggedIn = () => localStorage.getItem("token");
+
+  useEffect(() => {
+    const fetch = async () => {
+      const res = await axios.get("http://localhost:5000/api/products");
+      setProducts(res.data);
+    };
+    fetch();
+  }, []);
+
   const filtered = useMemo(() => {
-    return PRODUCTS.filter((p) => {
-      const matchCategory = category === "All" || p.category === category;
-      const matchSearch = p.name.toLowerCase().includes(search.toLowerCase());
-      return matchCategory && matchSearch;
+    return products.filter((p) => {
+      const matchCategory =
+        category === "All" || normalize(p.category) === normalize(category);
+      const matchSearch = (p.name || "")
+        .toLowerCase()
+        .includes(search.toLowerCase());
+      const matchPrice = p.price <= price;
+      return matchCategory && matchSearch && matchPrice;
     });
-  }, [search, category]);
+  }, [search, category, price, products]);
+
+  const addToCart = (p) => {
+    if (!isLoggedIn()) {
+      setShowPopup(true);
+      return;
+    }
+
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart.push({ ...p, qty: 1 });
+    localStorage.setItem("cart", JSON.stringify(cart));
+    alert("Added to cart ✅");
+  };
 
   return (
-    <div className="relative min-h-screen">
-      {/* 🌸 BACKGROUND */}
-      <div
-        className="fixed inset-0 bg-cover bg-center z-[-2]"
-        style={{ backgroundImage: "url('/bgw.png')" }}
-      />
-      <div className="fixed inset-0 bg-white/20 backdrop-blur-md z-[-1]" />
+    <div className="min-h-screen bg-[#f6f2ee] text-[#222]">
+      {showPopup && <LoginPopup onClose={() => setShowPopup(false)} />}
 
-      <Navbar />
+      <div className="sticky top-0 z-50">
+        <Navbar />
+      </div>
 
-      {/* 🌿 MAIN */}
-      <div className="mx-4 md:mx-8 mt-6 p-8 rounded-[32px] bg-gradient-to-br from-[#EEF2EC]/90 to-[#F3F1EA]/90 shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
-        {/* 🔥 HEADER */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-12">
-          <div>
-            <h1 className="text-4xl font-bold text-[#32758b]">
-              Shop Kashmiri Products
-            </h1>
-            <p className="text-gray-600 mt-2">
-              Explore authentic handcrafted luxury
-            </p>
-          </div>
+      <div className="px-10 py-10">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex justify-between items-center mb-10"
+        >
+          <h1 className="text-4xl font-semibold tracking-wide">
+            Kashmir Luxury Store
+          </h1>
 
-          {/* 🔍 SEARCH */}
-          <div className="flex items-center bg-white/90 shadow-lg rounded-full px-5 py-3 w-full lg:w-[400px]">
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search products..."
-              className="flex-1 outline-none bg-transparent"
-            />
-            <button className="bg-[#32758b] text-white px-5 py-2 rounded-full hover:scale-105 transition">
-              Search
-            </button>
-          </div>
-        </div>
+          <input
+            placeholder="Search luxury items..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="px-6 py-3 rounded-full border border-[#c8a97e] w-80 bg-white shadow"
+          />
+        </motion.div>
 
-        {/* 🧱 LAYOUT */}
         <div className="grid lg:grid-cols-4 gap-10">
-          {/* 🧾 SIDEBAR */}
-          <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-md h-fit">
-            <h2 className="font-semibold text-lg text-[#32758b] mb-4">
-              Categories
-            </h2>
+          {/* SIDEBAR */}
+          <div className="bg-white rounded-2xl shadow-xl p-6">
+            <h3 className="text-lg font-semibold mb-4">Categories</h3>
 
-            <div className="space-y-2">
-              {CATEGORIES.map((c) => (
-                <button
-                  key={c}
-                  onClick={() => setCategory(c)}
-                  className={`block text-left w-full px-4 py-2 rounded-xl transition-all duration-300 font-medium
-                  ${
-                    category === c
-                      ? "bg-[#32758b] text-white shadow-md"
-                      : "text-[#32758b] hover:bg-[#EEF2EC] hover:pl-5"
-                  }`}
-                >
-                  {c}
-                </button>
-              ))}
-            </div>
+            {CATEGORIES.map((c) => (
+              <button
+                key={c}
+                onClick={() => setCategory(c)}
+                className={`block w-full text-left px-4 py-2 mb-2 rounded-lg ${
+                  category === c
+                    ? "bg-[#c8a97e] text-white"
+                    : "hover:bg-gray-100"
+                }`}
+              >
+                {c}
+              </button>
+            ))}
           </div>
 
-          {/* 🛍️ PRODUCTS */}
-          <div className="lg:col-span-3 grid sm:grid-cols-2 xl:grid-cols-3 gap-8">
-            {filtered.map((item) => (
+          {/* PRODUCTS */}
+          <div className="lg:col-span-3 grid md:grid-cols-3 gap-8">
+            {filtered.map((item, i) => (
               <motion.div
-                key={item.id}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                whileHover={{ y: -12, scale: 1.04 }}
-                transition={{ duration: 0.4 }}
-                onClick={() => navigate(`/product/${item.id}`)}
-                className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all cursor-pointer group"
+                key={item._id}
+                whileHover={{ y: -10, scale: 1.04 }}
+                className="bg-white rounded-2xl shadow-xl overflow-hidden"
               >
-                {/* IMAGE */}
-                <div className="overflow-hidden relative">
-                  <img
-                    src={item.img}
-                    className="h-56 w-full object-cover group-hover:scale-110 transition duration-500"
-                  />
+                <img
+                  src={item.images?.[0]}
+                  className="h-56 w-full object-cover cursor-pointer"
+                  onClick={() => navigate(`/product/${item._id}`)}
+                />
 
-                  {/* PREMIUM OVERLAY */}
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition" />
-                </div>
-
-                {/* CONTENT */}
                 <div className="p-5">
-                  <h3 className="font-semibold text-[#32758b] text-lg">
-                    {item.name}
-                  </h3>
-
-                  <p className="text-[#D4AF37] font-bold mt-1 text-lg">
+                  <h3 className="text-lg font-medium">{item.name}</h3>
+                  <p className="text-[#c8a97e] text-xl font-semibold mt-2">
                     ₹{item.price}
                   </p>
 
-                  {/* BUTTON */}
                   <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      alert("Added to cart");
-                    }}
-                    className="mt-4 w-full bg-[#32758b] text-white py-2 rounded-lg hover:bg-black transition"
+                    onClick={() => addToCart(item)}
+                    className="mt-4 w-full bg-[#c8a97e] text-white py-2 rounded-xl"
                   >
                     Add to Cart
                   </button>

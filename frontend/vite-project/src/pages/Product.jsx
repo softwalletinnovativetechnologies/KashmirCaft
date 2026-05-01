@@ -1,135 +1,203 @@
 import Navbar from "../components/Navbar";
 import { motion } from "framer-motion";
-import { useState } from "react";
-
-const product = {
-  name: "Pashmina Shawl",
-  price: 4999,
-  description:
-    "Experience the elegance of authentic Kashmiri Pashmina. Handcrafted with precision and tradition.",
-  images: [
-    "https://images.unsplash.com/photo-1593032465171-8f6d8c3c6b7d",
-    "https://images.unsplash.com/photo-1585386959984-a4155224a1ad",
-    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
-  ],
-};
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+import LoginPopup from "../components/LoginPopup";
 
 export default function Product() {
-  const [selectedImage, setSelectedImage] = useState(product.images[0]);
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const [product, setProduct] = useState(null);
+  const [selectedImage, setSelectedImage] = useState("");
+  const [zoomStyle, setZoomStyle] = useState({});
   const [qty, setQty] = useState(1);
+
+  const [showPopup, setShowPopup] = useState(false);
+
+  const [wishlist, setWishlist] = useState(
+    JSON.parse(localStorage.getItem("wishlist")) || [],
+  );
+
+  const isLoggedIn = () => localStorage.getItem("token");
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const res = await axios.get(`http://localhost:5000/api/products/${id}`);
+      setProduct(res.data);
+      setSelectedImage(res.data.images?.[0] || "");
+    };
+    fetchProduct();
+  }, [id]);
+
+  if (!product) return <div className="p-10">Loading...</div>;
+
+  const totalPrice = product.price * qty;
+
+  // 🛒 ADD TO CART
+  const addToCart = () => {
+    if (!isLoggedIn()) {
+      setShowPopup(true);
+      return;
+    }
+
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const existing = cart.find((item) => item._id === product._id);
+
+    if (existing) {
+      existing.qty += qty;
+    } else {
+      cart.push({ ...product, qty });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    alert("Added to cart ✅");
+  };
+
+  // ❤️ WISHLIST
+  const toggleWishlist = () => {
+    if (!isLoggedIn()) {
+      setShowPopup(true);
+      return;
+    }
+
+    let updated;
+
+    if (wishlist.find((i) => i._id === product._id)) {
+      updated = wishlist.filter((i) => i._id !== product._id);
+    } else {
+      updated = [...wishlist, product];
+    }
+
+    setWishlist(updated);
+    localStorage.setItem("wishlist", JSON.stringify(updated));
+  };
+
+  const isWishlisted = wishlist.find((i) => i._id === product._id);
+
+  // 🔍 ZOOM
+  const handleMouseMove = (e) => {
+    const { left, top, width, height } = e.target.getBoundingClientRect();
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
+
+    setZoomStyle({
+      transformOrigin: `${x}% ${y}%`,
+      transform: "scale(2)",
+    });
+  };
+
+  const resetZoom = () => {
+    setZoomStyle({ transform: "scale(1)" });
+  };
 
   return (
     <div className="relative min-h-screen">
-      {/* 🌸 BG */}
+      {showPopup && <LoginPopup onClose={() => setShowPopup(false)} />}
+
       <div
         className="fixed inset-0 bg-cover bg-center z-[-2]"
         style={{ backgroundImage: "url('/bgw.png')" }}
       />
-      <div className="fixed inset-0 bg-white/30 backdrop-blur-md z-[-1]" />
+      <div className="fixed inset-0 bg-white/40 backdrop-blur-md z-[-1]" />
 
       <Navbar />
 
-      {/* 🌿 MAIN */}
-      <div className="mx-4 md:mx-8 mt-6 p-6 md:p-10 rounded-[32px] bg-gradient-to-br from-[#EEF2EC] to-[#F3F1EA] shadow-xl">
-        <div className="grid md:grid-cols-2 gap-10">
-          {/* 🖼️ IMAGE GALLERY */}
-          <motion.div
-            initial={{ opacity: 0, x: -60 }}
-            animate={{ opacity: 1, x: 0 }}
-          >
-            <div className="rounded-3xl overflow-hidden shadow-lg">
+      <div className="mx-6 md:mx-12 mt-10 p-10 rounded-[40px] bg-gradient-to-br from-[#EEF2EC] to-[#F3F1EA] shadow-2xl">
+        <div className="grid md:grid-cols-2 gap-12">
+          {/* IMAGE */}
+          <div>
+            <div
+              className="overflow-hidden rounded-3xl"
+              onMouseMove={handleMouseMove}
+              onMouseLeave={resetZoom}
+            >
               <img
                 src={selectedImage}
-                className="w-full h-[400px] object-cover hover:scale-105 transition duration-500"
+                style={zoomStyle}
+                className="w-full h-[450px] object-cover transition duration-200"
               />
             </div>
 
-            {/* THUMBNAILS */}
-            <div className="flex gap-4 mt-4">
-              {product.images.map((img, i) => (
+            <div className="flex gap-3 mt-4">
+              {product.images?.map((img, i) => (
                 <img
                   key={i}
                   src={img}
                   onClick={() => setSelectedImage(img)}
-                  className={`w-20 h-20 object-cover rounded-xl cursor-pointer border-2 ${
-                    selectedImage === img
-                      ? "border-[#32758b]"
-                      : "border-transparent"
-                  }`}
+                  className="w-20 h-20 rounded-lg cursor-pointer border"
                 />
               ))}
             </div>
-          </motion.div>
+          </div>
 
-          {/* 🧾 PRODUCT INFO */}
-          <motion.div
-            initial={{ opacity: 0, x: 60 }}
-            animate={{ opacity: 1, x: 0 }}
-          >
-            <h1 className="text-3xl md:text-4xl font-bold text-[#1F3D2B]">
-              {product.name}
-            </h1>
+          {/* DETAILS */}
+          <div>
+            <h1 className="text-4xl font-bold">{product.name}</h1>
 
-            {/* ⭐ RATING */}
-            <div className="flex items-center gap-1 mt-2 text-[#D4AF37]">
-              ⭐⭐⭐⭐⭐
-              <span className="text-gray-500 text-sm ml-2">(120 reviews)</span>
-            </div>
-
-            {/* 💰 PRICE */}
-            <p className="text-3xl font-bold text-[#D4AF37] mt-4">
-              ₹{product.price}
+            <p className="text-3xl text-[#D4AF37] mt-4 font-bold">
+              ₹{totalPrice}
+              <span className="text-gray-500 text-lg ml-2">
+                ({product.price} × {qty})
+              </span>
             </p>
 
-            {/* 📄 DESCRIPTION */}
-            <p className="text-gray-600 mt-4 leading-relaxed">
-              {product.description}
+            <p className="mt-4 text-gray-600">
+              {product.description || "Premium handcrafted Kashmiri product."}
             </p>
 
-            {/* 🔢 QUANTITY */}
-            <div className="flex items-center gap-4 mt-6 text-black">
-              <span className="font-medium">Quantity:</span>
+            {/* QTY */}
+            <div className="flex items-center gap-4 mt-6">
+              <span>Quantity:</span>
 
-              <div className="flex items-center border rounded-xl overflow-hidden text-black">
+              <div className="flex border rounded-xl overflow-hidden">
                 <button
                   onClick={() => setQty(qty > 1 ? qty - 1 : 1)}
-                  className="px-3 py-1"
+                  className="px-4"
                 >
                   -
                 </button>
-
-                <span className="px-4">{qty}</span>
-
-                <button onClick={() => setQty(qty + 1)} className="px-3 py-1">
+                <span className="px-6">{qty}</span>
+                <button onClick={() => setQty(qty + 1)} className="px-4">
                   +
                 </button>
               </div>
             </div>
 
-            {/* 🛒 BUTTONS */}
+            {/* BUTTONS */}
             <div className="flex gap-4 mt-8">
-              <button className="flex-1 bg-[#32758b] text-white py-3 rounded-xl hover:bg-black transition">
+              <button
+                onClick={addToCart}
+                className="flex-1 bg-[#32758b] text-white py-3 rounded-xl"
+              >
                 Add to Cart
               </button>
 
-              <button className="flex-1 bg-[#D4AF37] text-black py-3 rounded-xl hover:scale-105 transition">
+              <button
+                onClick={() => {
+                  if (!isLoggedIn()) return setShowPopup(true);
+                  addToCart();
+                  navigate("/checkout");
+                }}
+                className="flex-1 bg-[#D4AF37] text-black py-3 rounded-xl"
+              >
                 Buy Now
               </button>
             </div>
-          </motion.div>
-        </div>
 
-        {/* 🧾 DETAILS SECTION */}
-        <div className="mt-16">
-          <h2 className="text-2xl font-semibold text-[#32758b] mb-4">
-            Product Details
-          </h2>
-
-          <p className="text-gray-600 leading-relaxed max-w-3xl">
-            This premium Kashmiri Pashmina is crafted using traditional
-            techniques passed down through generations. Soft, warm, and
-            luxurious, it is perfect for all seasons.
-          </p>
+            {/* WISHLIST */}
+            <button
+              onClick={toggleWishlist}
+              className={`mt-6 px-6 py-3 rounded-xl ${
+                isWishlisted
+                  ? "bg-red-500 text-white"
+                  : "border border-[#32758b] text-[#32758b]"
+              }`}
+            >
+              {isWishlisted ? "❤️ Added" : "🤍 Add to Wishlist"}
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -8,6 +8,12 @@ const productSchema = new mongoose.Schema(
     images: [String],
     category: String,
     stock: Number,
+
+    // ✅ ADD THIS (VERY IMPORTANT)
+    seller: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
   { timestamps: true },
 );

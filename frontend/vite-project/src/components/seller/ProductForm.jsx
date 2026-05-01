@@ -5,6 +5,7 @@ import axios from "axios";
 const ProductForm = ({ refresh }) => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+  const [category, setCategory] = useState("pashmina");
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState("");
 
@@ -13,26 +14,36 @@ const ProductForm = ({ refresh }) => {
       return alert("Please fill all fields");
     }
 
-    const token = localStorage.getItem("token");
+    try {
+      const token = localStorage.getItem("token");
 
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("price", price);
-    formData.append("image", file);
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("price", price);
 
-    await axios.post("http://localhost:5000/api/products", formData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
-      },
-    });
+      // ✅ IMPORTANT (clean category)
+      formData.append("category", category.toLowerCase());
 
-    setName("");
-    setPrice("");
-    setFile(null);
-    setPreview("");
+      formData.append("image", file);
 
-    refresh && refresh();
+      await axios.post("http://localhost:5000/api/seller/products", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // reset
+      setName("");
+      setPrice("");
+      setCategory("pashmina");
+      setFile(null);
+      setPreview("");
+
+      refresh && refresh();
+    } catch (err) {
+      console.log("❌ ADD ERROR:", err.response?.data || err);
+      alert("Product add failed");
+    }
   };
 
   return (
@@ -40,19 +51,19 @@ const ProductForm = ({ refresh }) => {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       className="mb-10 p-8 rounded-3xl 
-      backdrop-blur-2xl bg-white/70 border border-white/30 shadow-xl"
+      bg-white/80 backdrop-blur-xl shadow-2xl border"
     >
-      <h2 className="text-3xl mb-6 text-center font-light">
+      <h2 className="text-3xl text-center mb-8 font-light">
         Add <span className="text-[#c8a97e]">Luxury Product</span>
       </h2>
 
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-4 gap-6">
         <input
           type="text"
           placeholder="Product Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="px-4 py-3 rounded-xl border bg-white/80 focus:ring-2 focus:ring-[#c8a97e]"
+          className="px-4 py-3 rounded-xl border"
         />
 
         <input
@@ -60,11 +71,21 @@ const ProductForm = ({ refresh }) => {
           placeholder="Price ₹"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
-          className="px-4 py-3 rounded-xl border bg-white/80 focus:ring-2 focus:ring-[#c8a97e]"
+          className="px-4 py-3 rounded-xl border"
         />
 
-        {/* 📸 FILE UPLOAD */}
-        <label className="flex items-center justify-center border-2 border-dashed rounded-xl cursor-pointer p-4 hover:bg-[#f3e8e4] transition">
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          className="px-4 py-3 rounded-xl border"
+        >
+          <option value="pashmina">Pashmina</option>
+          <option value="carpets">Carpets</option>
+          <option value="dryfruits">Dry Fruits</option>
+          <option value="handicrafts">Handicrafts</option>
+        </select>
+
+        <label className="flex items-center justify-center border-2 border-dashed rounded-xl cursor-pointer p-4">
           Upload Image
           <input
             type="file"
@@ -78,24 +99,16 @@ const ProductForm = ({ refresh }) => {
         </label>
       </div>
 
-      {/* 🖼️ PREVIEW */}
       {preview && (
-        <motion.img
-          src={preview}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="mt-6 w-40 h-40 object-cover rounded-xl shadow"
-        />
+        <img src={preview} className="mt-6 w-40 h-40 object-cover rounded-xl" />
       )}
 
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+      <button
         onClick={handleAdd}
-        className="mt-6 px-6 py-3 bg-[#c8a97e] text-white rounded-xl shadow"
+        className="mt-6 w-full py-3 bg-[#c8a97e] text-white rounded-xl"
       >
         Add Product
-      </motion.button>
+      </button>
     </motion.div>
   );
 };

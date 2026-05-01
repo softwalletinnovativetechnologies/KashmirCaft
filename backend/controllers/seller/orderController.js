@@ -27,13 +27,18 @@ export const getSellerOrders = async (req, res) => {
 
 // 🔄 UPDATE STATUS
 export const updateOrderStatus = async (req, res) => {
-  const { status } = req.body;
+  try {
+    const { status } = req.body;
 
-  const order = await Order.findByIdAndUpdate(
-    req.params.id,
-    { status },
-    { new: true },
-  );
+    const order = await Order.findById(req.params.id);
 
-  res.json(order);
+    if (!order) return res.status(404).json({ message: "Order not found" });
+
+    order.status = status;
+    await order.save();
+
+    res.json(order);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };

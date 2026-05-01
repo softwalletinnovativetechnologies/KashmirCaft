@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react";
-import { getProducts, deleteProduct } from "../../services/productApi";
+import axios from "axios";
 import { motion } from "framer-motion";
 import EditProductModal from "./EditProductModal";
+
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [selected, setSelected] = useState(null);
   const [open, setOpen] = useState(false);
+
+  const token = localStorage.getItem("token");
+
   const fetchData = async () => {
-    const res = await getProducts();
+    const res = await axios.get("http://localhost:5000/api/seller/products", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     setProducts(res.data);
   };
 
@@ -16,7 +22,9 @@ const ProductList = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    await deleteProduct(id);
+    await axios.delete(`http://localhost:5000/api/seller/products/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     fetchData();
   };
 
@@ -26,43 +34,31 @@ const ProductList = () => {
         <motion.div
           key={p._id}
           whileHover={{ y: -10 }}
-          className="bg-white/60 backdrop-blur-xl border border-white/30 
-          rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition"
+          className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden"
         >
-          {/* IMAGE */}
-          <div className="overflow-hidden">
-            <img
-              src={p.image}
-              className="w-full h-52 object-cover hover:scale-110 transition duration-500"
-            />
-          </div>
+          <img
+            src={p.images?.[0] || "https://via.placeholder.com/300"}
+            className="w-full h-52 object-cover"
+          />
 
-          {/* CONTENT */}
           <div className="p-4 text-center">
-            <h3 className="text-lg font-medium">{p.name}</h3>
-            <p className="text-[#c8a97e] text-lg mt-1">₹{p.price}</p>
+            <h3 className="text-lg">{p.name}</h3>
+            <p className="text-[#c8a97e] font-bold">₹{p.price}</p>
 
-            {/* ACTIONS */}
             <div className="flex justify-center gap-3 mt-4">
               <button
                 onClick={() => {
                   setSelected(p);
                   setOpen(true);
                 }}
-                className="px-3 py-1 bg-blue-500 text-white rounded-lg"
+                className="px-3 py-1 bg-blue-500 text-white rounded"
               >
                 Edit
               </button>
-              <EditProductModal
-                isOpen={open}
-                onClose={() => setOpen(false)}
-                product={selected}
-                refresh={fetchData}
-              />
 
               <button
                 onClick={() => handleDelete(p._id)}
-                className="px-3 py-1 bg-red-500 text-white rounded-lg"
+                className="px-3 py-1 bg-red-500 text-white rounded"
               >
                 Delete
               </button>
@@ -70,6 +66,13 @@ const ProductList = () => {
           </div>
         </motion.div>
       ))}
+
+      <EditProductModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        product={selected}
+        refresh={fetchData}
+      />
     </div>
   );
 };

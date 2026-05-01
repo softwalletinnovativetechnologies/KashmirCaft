@@ -1,8 +1,9 @@
-import app from "./app.js";
 import dotenv from "dotenv";
-import mongoose from "mongoose";
-
 dotenv.config();
+
+import app from "./app.js";
+
+import mongoose from "mongoose";
 
 // 🔗 MONGODB CONNECTION
 const connectDB = async () => {

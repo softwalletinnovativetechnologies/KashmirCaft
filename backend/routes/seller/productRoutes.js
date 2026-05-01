@@ -17,7 +17,7 @@ router.post("/", protect, upload.single("image"), addProduct);
 router.get("/", protect, getMyProducts);
 
 // ✏️ UPDATE PRODUCT (with image)
-router.put("/:id", protect, upload.single("image"), updateProduct);
+router.put("/:id", protect, upload.single("images"), updateProduct);
 
 // ❌ DELETE
 router.delete("/:id", protect, deleteProduct);

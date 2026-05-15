@@ -2,7 +2,10 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
-    name: String,
+    name: {
+      type: String,
+      required: true,
+    },
 
     email: {
       type: String,
@@ -18,19 +21,41 @@ const userSchema = new mongoose.Schema(
 
     role: {
       type: String,
-      enum: ["buyer", "seller", "admin"], // ✅ FIX
+      enum: ["buyer", "seller", "admin"],
       default: "buyer",
     },
 
-    isPaid: {
+    // 🔥 SELLER DETAILS
+    phone: String,
+    shopName: String,
+
+    aadhaarNumber: String,
+    panNumber: String,
+    gstNumber: String,
+
+    aadhaarFront: String,
+    aadhaarBack: String,
+    panCardImage: String,
+    profileImage: String,
+
+    isVerified: {
       type: Boolean,
       default: false,
     },
 
     status: {
       type: String,
-      enum: ["pending", "approved", "blocked"],
-      default: "approved",
+      enum: ["pending", "approved", "rejected", "blocked"],
+      default: "pending",
+    },
+
+    statusUpdatedAt: {
+      type: Date,
+    },
+
+    statusUpdatedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
   },
   { timestamps: true },

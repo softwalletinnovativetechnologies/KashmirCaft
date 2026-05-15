@@ -1,24 +1,106 @@
 import express from "express";
 import Product from "../../models/Product.js";
+import { protect, isAdmin } from "../../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// All products (admin view)
-router.get("/", async (req, res) => {
-  const products = await Product.find().populate("sellerId");
-  res.json(products);
+// 🔥 GET ALL PRODUCTS FOR ADMIN
+router.get("/", protect, isAdmin, async (req, res) => {
+  try {
+    const products = await Product.find()
+      .populate("seller", "name email")
+      .sort({ createdAt: -1 });
+
+    res.json(products);
+  } catch (err) {
+    console.log(err);
+
+    res.status(500).json({
+      message: err.message,
+    });
+  }
 });
 
-// Approve product
-router.put("/approve/:id", async (req, res) => {
-  await Product.findByIdAndUpdate(req.params.id, { status: "approved" });
-  res.json({ message: "Approved" });
+// 🔥 APPROVE PRODUCT
+router.put("/approve/:id", protect, isAdmin, async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
+    }
+
+    product.status = "approved";
+
+    await product.save();
+
+    res.json({
+      success: true,
+      message: "Product approved successfully",
+    });
+  } catch (err) {
+    console.log(err);
+
+    res.status(500).json({
+      message: err.message,
+    });
+  }
 });
 
-// Delete product
-router.delete("/:id", async (req, res) => {
-  await Product.findByIdAndDelete(req.params.id);
-  res.json({ message: "Deleted" });
+// 🔥 REJECT PRODUCT
+router.put("/reject/:id", protect, isAdmin, async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
+    }
+
+    product.status = "rejected";
+
+    await product.save();
+
+    res.json({
+      success: true,
+      message: "Product rejected successfully",
+    });
+  } catch (err) {
+    console.log(err);
+
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+});
+
+// 🔥 DELETE PRODUCT
+router.delete("/:id", protect, isAdmin, async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
+    }
+
+    await product.deleteOne();
+
+    res.json({
+      success: true,
+      message: "Product deleted successfully",
+    });
+  } catch (err) {
+    console.log(err);
+
+    res.status(500).json({
+      message: err.message,
+    });
+  }
 });
 
 export default router;

@@ -8,7 +8,10 @@ const productSchema = new mongoose.Schema(
     images: [String],
     category: String,
     stock: Number,
-
+    status: {
+      type: String,
+      default: "approved",
+    },
     // ✅ ADD THIS (VERY IMPORTANT)
     seller: {
       type: mongoose.Schema.Types.ObjectId,

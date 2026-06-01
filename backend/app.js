@@ -16,11 +16,12 @@ import sellerDashboardRoutes from "./routes/seller/dashboardRoutes.js";
 import sellerOrderRoutes from "./routes/seller/orderRoutes.js";
 import earningRoutes from "./routes/seller/earningRoutes.js";
 import paymentRoutes from "./routes/seller/paymentRoutes.js";
+import sellerProfileRoutes from "./routes/seller/profileRoutes.js";
 
 // ================= ADMIN =================
 import adminDashboardRoutes from "./routes/admin/adminDashboardRoutes.js";
 import adminProductRoutes from "./routes/admin/adminProductRoutes.js";
-//import adminOrderRoutes from "./routes/admin/adminOrderRoutes.js";
+import adminOrderRoutes from "./routes/admin/adminOrderRoutes.js";
 import adminVendorRoutes from "./routes/admin/adminVendorRoutes.js";
 
 // 🔐 MIDDLEWARE
@@ -62,12 +63,14 @@ app.use("/api/seller/earnings", protect, earningRoutes);
 
 app.use("/api/seller/payments", protect, paymentRoutes);
 
+app.use("/api/seller/profile", protect, sellerProfileRoutes);
+
 // ================= ADMIN =================
 app.use("/api/admin/dashboard", protect, isAdmin, adminDashboardRoutes);
 
 app.use("/api/admin/products", protect, isAdmin, adminProductRoutes);
 
-//app.use("/api/admin/orders", protect, isAdmin, adminOrderRoutes);
+app.use("/api/admin/orders", protect, isAdmin, adminOrderRoutes);
 
 app.use("/api/admin/vendors", protect, isAdmin, adminVendorRoutes);
 

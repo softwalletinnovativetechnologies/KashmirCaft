@@ -33,14 +33,24 @@ export default function AdminPanel() {
   const [orders, setOrders] = useState([]);
   const [stats, setStats] = useState({});
 
-  const token = localStorage.getItem("token");
+  const storedUser =
+    localStorage.getItem("user") || localStorage.getItem("userInfo");
+
+  const user = storedUser ? JSON.parse(storedUser) : null;
+
+  const token = user?.token || "";
 
   useEffect(() => {
+    if (!token) {
+      console.log("No token found");
+      return;
+    }
+
     fetchVendors();
     fetchProducts();
     fetchOrders();
     fetchStats();
-  }, []);
+  }, [token]);
 
   // ================= FETCH =================
 
@@ -51,6 +61,11 @@ export default function AdminPanel() {
           Authorization: `Bearer ${token}`,
         },
       });
+
+      if (!res.ok) {
+        console.log("Vendor API Error:", res.status);
+        return;
+      }
 
       const data = await res.json();
 
@@ -68,6 +83,11 @@ export default function AdminPanel() {
         },
       });
 
+      if (!res.ok) {
+        console.log("Product API Error:", res.status);
+        return;
+      }
+
       const data = await res.json();
 
       setProducts(Array.isArray(data) ? data : []);
@@ -84,6 +104,11 @@ export default function AdminPanel() {
         },
       });
 
+      if (!res.ok) {
+        console.log("Order API Error:", res.status);
+        return;
+      }
+
       const data = await res.json();
 
       setOrders(Array.isArray(data) ? data : []);
@@ -99,6 +124,11 @@ export default function AdminPanel() {
           Authorization: `Bearer ${token}`,
         },
       });
+
+      if (!res.ok) {
+        console.log("Stats API Error:", res.status);
+        return;
+      }
 
       const data = await res.json();
 
@@ -494,44 +524,63 @@ export default function AdminPanel() {
 
         {/* ORDERS */}
         {active === "Orders" && (
-          <div className="space-y-6">
-            {orders.map((order) => (
-              <motion.div
-                whileHover={{ y: -4 }}
-                key={order._id}
-                className="bg-white rounded-[32px] p-7 shadow-lg"
-              >
-                <div className="flex justify-between flex-wrap gap-6">
-                  <div>
-                    <h3 className="text-2xl font-bold text-[#315765]">
-                      Order #{order._id?.slice(-6)}
-                    </h3>
+          <div className="space-y-5">
+            {orders.length === 0 ? (
+              <div className="bg-white rounded-[28px] p-8 shadow-lg text-center">
+                <h2 className="text-2xl font-bold text-[#315765]">
+                  No Orders Found
+                </h2>
 
-                    <p className="text-gray-500 mt-2 text-lg">
-                      Buyer: {order?.user?.name || "User"}
-                    </p>
+                <p className="text-gray-500 mt-2">
+                  Orders will appear here automatically
+                </p>
+              </div>
+            ) : (
+              orders.map((order) => (
+                <div
+                  key={order._id}
+                  className="bg-white rounded-[28px] p-6 shadow-lg"
+                >
+                  <div className="flex justify-between flex-wrap gap-5">
+                    <div>
+                      <h3 className="text-2xl font-bold text-[#315765]">
+                        Order #{order._id.slice(-6)}
+                      </h3>
 
-                    <p className="text-gray-500 mt-1">
-                      Payment: {order.paymentMethod || "Online"}
-                    </p>
-                  </div>
+                      <p className="text-gray-500 mt-2">
+                        Buyer: {order?.buyer?.name || "Unknown"}
+                      </p>
 
-                  <div>
-                    <p className="text-2xl  text-[#C8A97E] font-bold mt-3">
-                      ₹{order.totalAmount}
-                    </p>
+                      <p className="text-gray-500">
+                        Seller: {order?.seller?.name || "Unknown"}
+                      </p>
 
-                    <p className="text-green-600 mt-3 text-lg">
-                      Admin Earning: ₹{(order.totalAmount * 0.2).toFixed(0)}
-                    </p>
+                      <p className="text-gray-500">
+                        Product: {order?.product?.name || "Unknown"}
+                      </p>
 
-                    <p className="text-blue-600 text-lg">
-                      Seller Earning: ₹{(order.totalAmount * 0.8).toFixed(0)}
-                    </p>
+                      <p className="mt-2 text-blue-600">
+                        Status: {order.status}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="text-3xl font-bold text-[#C8A97E]">
+                        ₹{order.amount || 0}
+                      </p>
+
+                      <p className="text-green-600 mt-2">
+                        Admin: ₹{order.adminShare || 0}
+                      </p>
+
+                      <p className="text-blue-600">
+                        Seller: ₹{order.sellerShare || 0}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </motion.div>
-            ))}
+              ))
+            )}
           </div>
         )}
       </div>

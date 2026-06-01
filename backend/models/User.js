@@ -2,15 +2,20 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
+    // ================= BASIC =================
+
     name: {
       type: String,
       required: true,
+      trim: true,
     },
 
     email: {
       type: String,
       required: true,
       unique: true,
+      lowercase: true,
+      trim: true,
     },
 
     password: {
@@ -25,18 +30,101 @@ const userSchema = new mongoose.Schema(
       default: "buyer",
     },
 
-    // 🔥 SELLER DETAILS
-    phone: String,
-    shopName: String,
+    // ================= SELLER INFO =================
 
-    aadhaarNumber: String,
-    panNumber: String,
-    gstNumber: String,
+    phone: {
+      type: String,
+      default: "",
+    },
 
-    aadhaarFront: String,
-    aadhaarBack: String,
-    panCardImage: String,
-    profileImage: String,
+    shopName: {
+      type: String,
+      default: "",
+    },
+
+    profileImage: {
+      type: String,
+      default: "",
+    },
+
+    // ================= DOCUMENTS =================
+
+    aadhaarNumber: {
+      type: String,
+      default: "",
+    },
+
+    panNumber: {
+      type: String,
+      default: "",
+    },
+
+    gstNumber: {
+      type: String,
+      default: "",
+    },
+
+    aadhaarFront: {
+      type: String,
+      default: "",
+    },
+
+    aadhaarBack: {
+      type: String,
+      default: "",
+    },
+
+    panCardImage: {
+      type: String,
+      default: "",
+    },
+
+    // ================= PAYOUT DETAILS =================
+
+    sellerDetails: {
+      type: {
+        accountHolderName: {
+          type: String,
+          default: "",
+        },
+
+        bankName: {
+          type: String,
+          default: "",
+        },
+
+        accountNumber: {
+          type: String,
+          default: "",
+        },
+
+        ifscCode: {
+          type: String,
+          default: "",
+        },
+
+        upiId: {
+          type: String,
+          default: "",
+        },
+
+        panNumber: {
+          type: String,
+          default: "",
+        },
+      },
+
+      default: () => ({
+        accountHolderName: "",
+        bankName: "",
+        accountNumber: "",
+        ifscCode: "",
+        upiId: "",
+        panNumber: "",
+      }),
+    },
+
+    // ================= ADMIN VERIFICATION =================
 
     isVerified: {
       type: Boolean,
@@ -51,14 +139,19 @@ const userSchema = new mongoose.Schema(
 
     statusUpdatedAt: {
       type: Date,
+      default: null,
     },
 
     statusUpdatedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      default: null,
     },
   },
-  { timestamps: true },
+
+  {
+    timestamps: true,
+  },
 );
 
 export default mongoose.model("User", userSchema);

@@ -4,9 +4,12 @@ import {
   verifyPayment,
 } from "../../controllers/seller/paymentController.js";
 
+import { protect } from "../../middleware/authMiddleware.js";
+
 const router = express.Router();
 
-router.post("/create-order", createOrder);
-router.post("/verify", verifyPayment);
+router.post("/create-order", protect, createOrder);
+
+router.post("/verify", protect, verifyPayment);
 
 export default router;

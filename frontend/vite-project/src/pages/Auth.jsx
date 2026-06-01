@@ -25,6 +25,13 @@ const Auth = () => {
   const [panCardImage, setPanCardImage] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
 
+  // BANK DETAILS
+  const [accountHolderName, setAccountHolderName] = useState("");
+  const [bankName, setBankName] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
+  const [ifscCode, setIfscCode] = useState("");
+  const [upiId, setUpiId] = useState("");
+
   const [loading, setLoading] = useState(false);
 
   // 🔥 VALIDATIONS
@@ -82,12 +89,19 @@ const Auth = () => {
 
         const { token, user } = res.data;
 
+        // SAVE COMPLETE USER + TOKEN
+        const userData = {
+          ...user,
+          token,
+        };
+
+        localStorage.setItem("user", JSON.stringify(userData));
+
         localStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify(user));
 
         alert("Login Successful ✅");
 
-        // 🔥 REDIRECT
+        // REDIRECT
         if (user.role === "admin") {
           window.location.href = "/admin";
         } else if (user.role === "seller") {
@@ -122,6 +136,18 @@ const Auth = () => {
         formData.append("shopName", shopName);
         formData.append("aadhaarNumber", aadhaarNumber);
         formData.append("panNumber", panNumber);
+
+        formData.append(
+          "sellerDetails",
+          JSON.stringify({
+            accountHolderName,
+            bankName,
+            accountNumber,
+            ifscCode,
+            upiId,
+            panNumber,
+          }),
+        );
         formData.append("gstNumber", gstNumber);
 
         if (aadhaarFront) formData.append("aadhaarFront", aadhaarFront);
@@ -284,7 +310,44 @@ const Auth = () => {
                   onChange={(e) => setPanNumber(e.target.value.toUpperCase())}
                   className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#c8a97e]"
                 />
+                <h3 className="font-semibold text-[#7F5430]">
+                  Bank & Payout Details
+                </h3>
 
+                <input
+                  type="text"
+                  placeholder="Account Holder Name"
+                  value={accountHolderName}
+                  onChange={(e) => setAccountHolderName(e.target.value)}
+                />
+
+                <input
+                  type="text"
+                  placeholder="Bank Name"
+                  value={bankName}
+                  onChange={(e) => setBankName(e.target.value)}
+                />
+
+                <input
+                  type="text"
+                  placeholder="Account Number"
+                  value={accountNumber}
+                  onChange={(e) => setAccountNumber(e.target.value)}
+                />
+
+                <input
+                  type="text"
+                  placeholder="IFSC Code"
+                  value={ifscCode}
+                  onChange={(e) => setIfscCode(e.target.value.toUpperCase())}
+                />
+
+                <input
+                  type="text"
+                  placeholder="UPI ID"
+                  value={upiId}
+                  onChange={(e) => setUpiId(e.target.value)}
+                />
                 <input
                   type="text"
                   placeholder="GST Number (Optional)"

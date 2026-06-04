@@ -6,17 +6,29 @@ import jwt from "jsonwebtoken";
 export const register = async (req, res) => {
   try {
     let {
-      name,
-      email,
-      password,
-      role,
+  name,
+  email,
+  password,
+  role,
 
-      phone,
-      shopName,
-      aadhaarNumber,
-      panNumber,
-      gstNumber,
-    } = req.body;
+  phone,
+  shopName,
+  aadhaarNumber,
+  panNumber,
+  gstNumber,
+
+  sellerDetails,
+} = req.body;
+
+let parsedSellerDetails = {};
+
+if (sellerDetails) {
+  try {
+    parsedSellerDetails = JSON.parse(sellerDetails);
+  } catch (err) {
+    console.log("Seller Details Parse Error:", err);
+  }
+}
 
     // 🔥 SAFE ROLE
     if (role !== "seller") {
@@ -91,30 +103,56 @@ export const register = async (req, res) => {
 
     // 🔥 CREATE USER
     const user = await User.create({
-      name,
-      email,
-      password: hashedPassword,
+  name,
+  email,
+  password: hashedPassword,
 
-      role,
+  role,
 
-      phone,
-      shopName,
-      aadhaarNumber,
-      panNumber,
-      gstNumber,
+  phone,
+  shopName,
+  aadhaarNumber,
+  panNumber,
+  gstNumber,
 
-      aadhaarFront: req.files?.aadhaarFront?.[0]?.filename || "",
+  sellerDetails: {
+    accountHolderName:
+      parsedSellerDetails.accountHolderName || "",
 
-      aadhaarBack: req.files?.aadhaarBack?.[0]?.filename || "",
+    bankName:
+      parsedSellerDetails.bankName || "",
 
-      panCardImage: req.files?.panCardImage?.[0]?.filename || "",
+    accountNumber:
+      parsedSellerDetails.accountNumber || "",
 
-      profileImage: req.files?.profileImage?.[0]?.filename || "",
+    ifscCode:
+      parsedSellerDetails.ifscCode || "",
 
-      isVerified: role === "seller" ? false : true,
+    upiId:
+      parsedSellerDetails.upiId || "",
 
-      status: role === "seller" ? "pending" : "approved",
-    });
+    panNumber:
+      parsedSellerDetails.panNumber || "",
+  },
+
+  aadhaarFront:
+    req.files?.aadhaarFront?.[0]?.filename || "",
+
+  aadhaarBack:
+    req.files?.aadhaarBack?.[0]?.filename || "",
+
+  panCardImage:
+    req.files?.panCardImage?.[0]?.filename || "",
+
+  profileImage:
+    req.files?.profileImage?.[0]?.filename || "",
+
+  isVerified: role === "seller" ? false : true,
+
+  status: role === "seller"
+    ? "pending"
+    : "approved",
+});
 
     res.status(201).json({
       message:

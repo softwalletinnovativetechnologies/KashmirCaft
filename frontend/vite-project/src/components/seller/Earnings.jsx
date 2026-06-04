@@ -15,7 +15,7 @@ const Earnings = () => {
   const fetch = async () => {
     const token = localStorage.getItem("token");
 
-    const res = await axios.get("http://localhost:5000/api/earnings", {
+    const res = await axios.get("http://localhost:5000/api/seller/earnings", {
       headers: { Authorization: `Bearer ${token}` },
     });
 

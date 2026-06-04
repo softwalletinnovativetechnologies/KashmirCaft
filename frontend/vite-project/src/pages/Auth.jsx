@@ -319,6 +319,7 @@ const Auth = () => {
                   placeholder="Account Holder Name"
                   value={accountHolderName}
                   onChange={(e) => setAccountHolderName(e.target.value)}
+                  className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#c8a97e]"
                 />
 
                 <input
@@ -326,6 +327,7 @@ const Auth = () => {
                   placeholder="Bank Name"
                   value={bankName}
                   onChange={(e) => setBankName(e.target.value)}
+                  className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#c8a97e]"
                 />
 
                 <input
@@ -333,6 +335,7 @@ const Auth = () => {
                   placeholder="Account Number"
                   value={accountNumber}
                   onChange={(e) => setAccountNumber(e.target.value)}
+                  className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#c8a97e]"
                 />
 
                 <input
@@ -340,6 +343,7 @@ const Auth = () => {
                   placeholder="IFSC Code"
                   value={ifscCode}
                   onChange={(e) => setIfscCode(e.target.value.toUpperCase())}
+                  className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#c8a97e]"
                 />
 
                 <input
@@ -347,6 +351,7 @@ const Auth = () => {
                   placeholder="UPI ID"
                   value={upiId}
                   onChange={(e) => setUpiId(e.target.value)}
+                  className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#c8a97e]"
                 />
                 <input
                   type="text"

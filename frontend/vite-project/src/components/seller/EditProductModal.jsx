@@ -121,7 +121,7 @@ const EditProductModal = ({ isOpen, onClose, product, refresh }) => {
 
             <button
               onClick={handleUpdate}
-              className="w-1/2 py-3 rounded-xl bg-[#c8a97e] text-white hover:bg-[#b89666]"
+              className="w-1/2 py-3 rounded-xl bg-[#1d635d] text-white hover:bg-[#23675f]"
             >
               Update
             </button>

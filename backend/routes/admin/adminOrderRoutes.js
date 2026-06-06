@@ -23,4 +23,31 @@ router.get("/", protect, isAdmin, async (req, res) => {
   }
 });
 
+// MARK SELLER PAYMENT COMPLETED
+router.put("/:id/pay-seller", protect, isAdmin, async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (!order) {
+      return res.status(404).json({
+        message: "Order not found",
+      });
+    }
+
+    order.sellerPaid = true;
+    order.sellerPaidAt = new Date();
+
+    await order.save();
+
+    res.json({
+      success: true,
+      message: "Seller marked as paid",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+});
+
 export default router;

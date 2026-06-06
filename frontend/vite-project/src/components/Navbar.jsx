@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
-
+import { FaBars, FaTimes } from "react-icons/fa";
 export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -82,11 +82,23 @@ export default function Navbar() {
           >
             ✦
           </div>
-          <h2 style={{ color: "#315765", margin: 0 }}>KashmirCraft</h2>
+          <h2
+  className="text-xl md:text-3xl"
+  style={{
+    color: "#315765",
+    margin: 0,
+  }}
+>
+  KashmirCraft
+</h2>
         </Link>
 
         {/* NAV LINKS */}
-        <div style={{ display: "flex", gap: "20px" }}>
+        {/* DESKTOP NAV LINKS */}
+<div
+  className="hidden md:flex"
+  style={{ gap: "20px" }}
+>
           {navLinks.map((item) => (
             <Link
               key={item.name}
@@ -101,7 +113,21 @@ export default function Navbar() {
             </Link>
           ))}
         </div>
-
+{/* MOBILE MENU BUTTON */}
+<div className="md:hidden">
+  <button
+    onClick={() => setMenuOpen(!menuOpen)}
+    style={{
+      background: "transparent",
+      border: "none",
+      fontSize: "24px",
+      cursor: "pointer",
+      color: "#315765",
+    }}
+  >
+    {menuOpen ? <FaTimes /> : <FaBars />}
+  </button>
+</div>
         {/* RIGHT */}
         <div style={{ position: "relative" }}>
           {!user ? (
@@ -145,7 +171,12 @@ export default function Navbar() {
                 >
                   {user.name?.charAt(0)}
                 </div>
-                <span style={{ color: "#000" }}>{user.name}</span>
+               <span
+  className="hidden md:block"
+  style={{ color: "#000" }}
+>
+  {user.name}
+</span>
               </div>
 
               {/* DROPDOWN */}
@@ -181,40 +212,62 @@ export default function Navbar() {
                       </p>
                     </div>
 
+                    {/* BUYER MENU */}
                     {user.role === "buyer" && (
                       <>
                         <button
-                          onClick={() => navigate("/wishlist")}
+                          onClick={() => navigate("/profile")}
                           style={itemStyle}
                         >
-                          Wishlist
+                          Profile
                         </button>
+
                         <button
                           onClick={() => navigate("/cart")}
                           style={itemStyle}
                         >
                           Cart
                         </button>
+
+                        <button
+                          onClick={() => navigate("/wishlist")}
+                          style={itemStyle}
+                        >
+                          Wishlist
+                        </button>
                       </>
                     )}
 
-                    {(user.role === "admin" || user.role === "seller") && (
-                      <button
-                        onClick={() =>
-                          navigate(user.role === "admin" ? "/admin" : "/seller")
-                        }
-                        style={itemStyle}
-                      >
-                        Dashboard
-                      </button>
+                    {/* SELLER MENU */}
+                    {user.role === "seller" && (
+                      <>
+                        <button
+                          onClick={() => navigate("/seller-dashboard")}
+                          style={itemStyle}
+                        >
+                          Seller Dashboard
+                        </button>
+
+                        <button
+                          onClick={() => navigate("/profile")}
+                          style={itemStyle}
+                        >
+                          Profile
+                        </button>
+                      </>
                     )}
 
-                    <button
-                      onClick={() => navigate("/profile")}
-                      style={itemStyle}
-                    >
-                      Profile
-                    </button>
+                    {/* ADMIN MENU */}
+                    {user.role === "admin" && (
+                      <>
+                        <button
+                          onClick={() => navigate("/admin")}
+                          style={itemStyle}
+                        >
+                          Admin Dashboard
+                        </button>
+                      </>
+                    )}
 
                     <button
                       onClick={handleLogout}
@@ -228,6 +281,120 @@ export default function Navbar() {
             </div>
           )}
         </div>
+        {/* MOBILE MENU */}
+<AnimatePresence>
+  {menuOpen && (
+    <motion.div
+      initial={{ opacity: 0, height: 0 }}
+      animate={{ opacity: 1, height: "auto" }}
+      exit={{ opacity: 0, height: 0 }}
+      className="md:hidden"
+      style={{
+        background: "#fff",
+        borderTop: "1px solid #eee",
+        overflow: "hidden",
+      }}
+    >
+      {navLinks.map((item) => (
+        <Link
+          key={item.name}
+          to={item.path}
+          onClick={() => setMenuOpen(false)}
+          style={{
+            display: "block",
+            padding: "14px",
+            color: "#111",
+            textDecoration: "none",
+            borderBottom: "1px solid #eee",
+          }}
+        >
+          {item.name}
+        </Link>
+      ))}
+
+      {!user ? (
+        <button
+          onClick={() => navigate("/auth")}
+          style={{
+            width: "100%",
+            padding: "14px",
+            border: "none",
+            background: "#315765",
+            color: "#fff",
+          }}
+        >
+          Login
+        </button>
+      ) : (
+        <>
+          {user.role === "buyer" && (
+            <>
+              <button
+                onClick={() => navigate("/profile")}
+                style={itemStyle}
+              >
+                Profile
+              </button>
+
+              <button
+                onClick={() => navigate("/cart")}
+                style={itemStyle}
+              >
+                Cart
+              </button>
+
+              <button
+                onClick={() => navigate("/wishlist")}
+                style={itemStyle}
+              >
+                Wishlist
+              </button>
+            </>
+          )}
+
+          {user.role === "seller" && (
+            <>
+              <button
+                onClick={() =>
+                  navigate("/seller-dashboard")
+                }
+                style={itemStyle}
+              >
+                Seller Dashboard
+              </button>
+
+              <button
+                onClick={() => navigate("/profile")}
+                style={itemStyle}
+              >
+                Profile
+              </button>
+            </>
+          )}
+
+          {user.role === "admin" && (
+            <button
+              onClick={() => navigate("/admin")}
+              style={itemStyle}
+            >
+              Admin Dashboard
+            </button>
+          )}
+
+          <button
+            onClick={handleLogout}
+            style={{
+              ...itemStyle,
+              color: "red",
+            }}
+          >
+            Logout
+          </button>
+        </>
+      )}
+    </motion.div>
+  )}
+</AnimatePresence>
       </div>
     </header>
   );

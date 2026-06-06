@@ -88,7 +88,7 @@ export default function Contact() {
                       Office Address
                     </h3>
                     <p className="text-gray-600">
-                      Srinagar, Jammu & Kashmir, India
+                      Kupwara, Jammu & Kashmir, India
                     </p>
                   </div>
                 </div>
@@ -222,13 +222,13 @@ export default function Contact() {
                 </h2>
 
                 <p className="text-gray-600 mt-2">
-                  Srinagar, Jammu & Kashmir
+                  Kupwara, Jammu & Kashmir
                 </p>
               </div>
 
               <iframe
                 title="Srinagar Map"
-                src="https://www.google.com/maps?q=Srinagar,Jammu%20and%20Kashmir&z=12&output=embed"
+                src="https://www.google.com/maps?q=Kupwara,Jammu%20and%20Kashmir&z=12&output=embed"
                 width="100%"
                 height="650"
                 loading="lazy"
@@ -263,7 +263,7 @@ export default function Contact() {
 
         {/* Footer */}
         <footer className="py-7 text-center text-[#315765] bg-[#dce9e8]">
-          © 2026 KashmirCraft Marketplace. All rights reserved.
+          © 2026 Softwallet Innovative Technologies | KashmirCraft Marketplace. All rights reserved.
         </footer>
 
       </div>

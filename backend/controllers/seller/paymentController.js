@@ -38,6 +38,7 @@ export const createOrder = async (req, res) => {
 // 🔥 VERIFY PAYMENT + SAVE ORDER
 export const verifyPayment = async (req, res) => {
   try {
+    console.log("REQ USER =", req.user);
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature, cart } =
       req.body;
 
@@ -70,7 +71,7 @@ export const verifyPayment = async (req, res) => {
         product: product._id,
         seller: product.seller,
 
-        buyer: req.user?._id || null,
+        buyer: req.user?.id,
 
         amount: total,
         adminShare,

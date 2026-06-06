@@ -251,7 +251,7 @@ export default function Seller() {
 
         {/* Footer */}
         <footer className="py-7 text-center text-[#315765] bg-[#dce9e8]">
-          © 2026 KashmirCraft Marketplace. All rights reserved.
+          © 2026 Softwallet Innovative Technologies | KashmirCraft Marketplace. All rights reserved.
         </footer>
 
       </div>

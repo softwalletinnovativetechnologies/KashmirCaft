@@ -11,6 +11,7 @@ import userOrderRoutes from "./routes/user/orderRoutes.js";
 
 // 🔥 PUBLIC PRODUCTS
 import productRoutes from "./routes/productRoutes.js";
+import subscriberRoutes from "./routes/subscriberRoutes.js";
 
 // ================= SELLER =================
 import sellerProductRoutes from "./routes/seller/productRoutes.js";
@@ -57,6 +58,10 @@ app.use("/api/user/orders", userOrderRoutes);
 
 // ================= PUBLIC PRODUCTS =================
 app.use("/api/products", productRoutes);
+app.use(
+  "/api/subscribers",
+  subscriberRoutes
+);
 
 // ================= SELLER =================
 app.use("/api/seller/products", protect, sellerProductRoutes);

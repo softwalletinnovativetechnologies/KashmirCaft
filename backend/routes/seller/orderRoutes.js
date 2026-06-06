@@ -15,8 +15,9 @@ router.post("/", protect, createOrder);
 // 🔥 GET ONLY LOGGED-IN SELLER'S ORDERS
 router.get("/", protect, async (req, res) => {
   try {
+    console.log("REQ USER:", req.user);
     const orders = await Order.find({
-      seller: req.user._id, // only current seller
+      seller: req.user.id, // only current seller
     })
       .populate("buyer", "name email")
       .populate("product", "name price images")
@@ -33,6 +34,6 @@ router.get("/", protect, async (req, res) => {
 });
 
 // 🔥 UPDATE ORDER STATUS
-router.put("/:id", protect, updateOrderStatus);
+router.put("/:id/status", protect, updateOrderStatus);
 
 export default router;

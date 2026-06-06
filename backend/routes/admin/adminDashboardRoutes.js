@@ -27,16 +27,27 @@ export const getAdminStats = async (req, res) => {
     const orders = await Order.find();
 
     // 🔥 TOTAL REVENUE
-    const totalRevenue = orders.reduce(
-      (acc, item) => acc + item.totalAmount,
-      0,
-    );
+   // 🔥 ADMIN EARNINGS
+const adminEarnings = orders.reduce(
+  (acc, item) => acc + Number(item.adminShare || 0),
+  0
+);
 
-    // 🔥 ADMIN EARNING (20%)
-    const adminEarnings = totalRevenue * 0.2;
+// 🔥 SELLER EARNINGS
+const sellerEarnings = orders.reduce(
+  (acc, item) => acc + Number(item.sellerShare || 0),
+  0
+);
 
-    // 🔥 SELLER EARNING (80%)
-    const sellerEarnings = totalRevenue * 0.8;
+// 🔥 TOTAL SALES
+const totalRevenue = orders.reduce(
+  (acc, item) => acc + Number(item.amount || 0),
+  0
+);
+
+console.log("ADMIN EARNINGS =", adminEarnings);
+console.log("SELLER EARNINGS =", sellerEarnings);
+console.log("TOTAL SALES =", totalRevenue);
 
     // 🔥 PENDING SELLERS
     const pendingVendors = await User.countDocuments({
@@ -45,17 +56,17 @@ export const getAdminStats = async (req, res) => {
     });
 
     res.json({
-      totalVendors,
-      totalCustomers,
-      totalOrders,
-      totalProducts,
-      pendingProducts,
-      pendingVendors,
+  totalVendors,
+  totalCustomers,
+  totalOrders,
+  totalProducts,
+  pendingProducts,
+  pendingVendors,
 
-      totalRevenue,
-      adminEarnings,
-      sellerEarnings,
-    });
+  totalRevenue: adminEarnings,
+  adminEarnings,
+  sellerEarnings,
+});
   } catch (err) {
     res.status(500).json({
       error: err.message,

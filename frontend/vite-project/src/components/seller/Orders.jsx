@@ -108,7 +108,7 @@ const Orders = () => {
             <select
               value={o.status}
               onChange={(e) => updateStatus(o._id, e.target.value)}
-              className="px-4 py-2 rounded-lg border bg-white focus:ring-2 focus:ring-[#c8a97e]"
+              className="px-4 py-2 rounded-lg border bg-white focus:ring-2 focus:ring-[#1f5862]"
             >
               <option value="placed">Placed</option>
               <option value="shipped">Shipped</option>

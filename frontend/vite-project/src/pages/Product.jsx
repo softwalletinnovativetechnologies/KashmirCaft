@@ -134,9 +134,9 @@ export default function Product() {
 
           {/* DETAILS */}
           <div>
-            <h1 className="text-4xl font-bold">{product.name}</h1>
+            <h1 className="text-4xl font-bold text-[#83c5be]">{product.name}</h1>
 
-            <p className="text-3xl text-[#D4AF37] mt-4 font-bold">
+            <p className="text-3xl text-[#83c5be] mt-4 font-bold">
               ₹{totalPrice}
               <span className="text-gray-500 text-lg ml-2">
                 ({product.price} × {qty})
@@ -148,7 +148,7 @@ export default function Product() {
             </p>
 
             {/* QTY */}
-            <div className="flex items-center gap-4 mt-6">
+            <div className="flex items-center gap-4 mt-6 text-black">
               <span>Quantity:</span>
 
               <div className="flex border rounded-xl overflow-hidden">

@@ -54,7 +54,7 @@ const ProductForm = ({ refresh }) => {
       bg-white/80 backdrop-blur-xl shadow-2xl border"
     >
       <h2 className="text-3xl text-center mb-8 font-light">
-        Add <span className="text-[#c8a97e]">Luxury Product</span>
+        Add <span className="text-[#1b665c]">Luxury Product</span>
       </h2>
 
       <div className="grid md:grid-cols-4 gap-6">
@@ -105,7 +105,7 @@ const ProductForm = ({ refresh }) => {
 
       <button
         onClick={handleAdd}
-        className="mt-6 w-full py-3 bg-[#c8a97e] text-white rounded-xl"
+        className="mt-6 w-full py-3 bg-[#1d666d] text-white rounded-xl"
       >
         Add Product
       </button>

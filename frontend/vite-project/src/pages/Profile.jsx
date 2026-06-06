@@ -145,7 +145,7 @@ export default function Profile() {
           ← Back to Home
         </button>
         {/* PROFILE */}
-        <div className="bg-white p-6 rounded-2xl shadow flex items-center gap-5">
+        <div className="bg-gradient-to-r from-[#315765] to-[#7F5430] p-8 rounded-3xl shadow-2xl flex items-center gap-5 text-white">
           <div className="w-16 h-16 bg-[#c8a97e] text-white rounded-full flex items-center justify-center text-xl">
             {profileData.name?.charAt(0) || "U"}
           </div>
@@ -183,7 +183,35 @@ export default function Profile() {
             </button>
           )}
         </div>
+        {/* MY ORDERS */}
+        <div className="bg-white p-6 rounded-2xl shadow">
+          <h2 className="text-xl font-semibold mb-4">My Orders</h2>
 
+          {orders.length === 0 ? (
+            <p className="text-gray-500">No orders yet</p>
+          ) : (
+            <div className="space-y-4">
+              {orders.map((order) => (
+                <div
+                  key={order._id}
+                  className="border rounded-xl p-4 flex justify-between items-center"
+                >
+                  <div>
+                    <p className="font-semibold">
+                      {order?.product?.name || "Product"}
+                    </p>
+
+                    <p className="text-sm text-gray-500">₹{order.amount}</p>
+                  </div>
+
+                  <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm">
+                    {order.status}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
         {/* ADDRESSES */}
         <div className="bg-white p-6 rounded-2xl shadow">
           <div className="flex justify-between">
@@ -226,7 +254,53 @@ export default function Profile() {
             </div>
           )}
         </div>
+        {user?.role === "seller" && (
+          <div className="bg-white p-6 rounded-2xl shadow">
+            <h2 className="text-xl font-semibold mb-6">Seller Details</h2>
 
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="border rounded-xl p-4">
+                <p className="text-sm text-gray-500">Shop Name</p>
+
+                <p className="font-semibold">{user?.shopName}</p>
+              </div>
+
+              <div className="border rounded-xl p-4">
+                <p className="text-sm text-gray-500">Phone</p>
+
+                <p className="font-semibold">{user?.phone}</p>
+              </div>
+
+              <div className="border rounded-xl p-4">
+                <p className="text-sm text-gray-500">Account Holder</p>
+
+                <p className="font-semibold">
+                  {user?.sellerDetails?.accountHolderName}
+                </p>
+              </div>
+
+              <div className="border rounded-xl p-4">
+                <p className="text-sm text-gray-500">Bank Name</p>
+
+                <p className="font-semibold">{user?.sellerDetails?.bankName}</p>
+              </div>
+
+              <div className="border rounded-xl p-4">
+                <p className="text-sm text-gray-500">Account Number</p>
+
+                <p className="font-semibold">
+                  XXXX{user?.sellerDetails?.accountNumber?.slice(-4)}
+                </p>
+              </div>
+
+              <div className="border rounded-xl p-4">
+                <p className="text-sm text-gray-500">IFSC</p>
+
+                <p className="font-semibold">{user?.sellerDetails?.ifscCode}</p>
+              </div>
+            </div>
+          </div>
+        )}
         {/* MODAL */}
         <AnimatePresence>
           {showForm && (

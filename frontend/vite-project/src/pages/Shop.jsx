@@ -59,13 +59,13 @@ export default function Shop() {
         <Navbar />
       </div>
 
-      <div className="px-10 py-10">
+      <div className="px-4 md:px-8 lg:px-10 py-6 md:py-10">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex justify-between items-center mb-10"
+          className="flex flex-col md:flex-row justify-between items-center gap-4 mb-10"
         >
-          <h1 className="text-4xl font-semibold tracking-wide">
+          <h1 className="text-2xl md:text-4xl font-semibold tracking-wide text-center md:text-left">
             Kashmir Luxury Store
           </h1>
 
@@ -73,14 +73,14 @@ export default function Shop() {
             placeholder="Search luxury items..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="px-6 py-3 rounded-full border border-[#c8a97e] w-80 bg-white shadow"
+            className="px-6 py-3 rounded-full border border-[#284b63] w-full md:w-80 bg-white shadow"
           />
         </motion.div>
 
-        <div className="grid lg:grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-10">
           {/* SIDEBAR */}
-          <div className="bg-white rounded-2xl shadow-xl p-6">
-            <h3 className="text-lg font-semibold mb-4">Categories</h3>
+<div className="bg-white rounded-2xl shadow-xl p-4 md:p-6">
+              <h3 className="text-lg font-semibold mb-4">Categories</h3>
 
             {CATEGORIES.map((c) => (
               <button
@@ -88,7 +88,7 @@ export default function Shop() {
                 onClick={() => setCategory(c)}
                 className={`block w-full text-left px-4 py-2 mb-2 rounded-lg ${
                   category === c
-                    ? "bg-[#c8a97e] text-white"
+                    ? "bg-[#284b63] text-white"
                     : "hover:bg-gray-100"
                 }`}
               >
@@ -98,7 +98,7 @@ export default function Shop() {
           </div>
 
           {/* PRODUCTS */}
-          <div className="lg:col-span-3 grid md:grid-cols-3 gap-8">
+          <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {filtered.map((item, i) => (
               <motion.div
                 key={item._id}
@@ -107,19 +107,19 @@ export default function Shop() {
               >
                 <img
                   src={item.images?.[0]}
-                  className="h-56 w-full object-cover cursor-pointer"
+                  className="h-48 md:h-56 w-full object-cover cursor-pointer"
                   onClick={() => navigate(`/product/${item._id}`)}
                 />
 
-                <div className="p-5">
+                <div className="p-4 md:p-5">
                   <h3 className="text-lg font-medium">{item.name}</h3>
-                  <p className="text-[#c8a97e] text-xl font-semibold mt-2">
+                 <p className="text-[#284b63] text-lg md:text-xl font-semibold mt-2">
                     ₹{item.price}
                   </p>
 
                   <button
                     onClick={() => addToCart(item)}
-                    className="mt-4 w-full bg-[#c8a97e] text-white py-2 rounded-xl"
+                    className="mt-4 w-full bg-[#284b63] text-white py-2 rounded-xl"
                   >
                     Add to Cart
                   </button>

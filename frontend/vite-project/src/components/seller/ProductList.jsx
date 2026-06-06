@@ -43,7 +43,7 @@ const ProductList = () => {
 
           <div className="p-4 text-center">
             <h3 className="text-lg">{p.name}</h3>
-            <p className="text-[#c8a97e] font-bold">₹{p.price}</p>
+            <p className="text-[#1d6a68] font-bold">₹{p.price}</p>
 
             <div className="flex justify-center gap-3 mt-4">
               <button
@@ -51,7 +51,8 @@ const ProductList = () => {
                   setSelected(p);
                   setOpen(true);
                 }}
-                className="px-3 py-1 bg-blue-500 text-white rounded"
+                className="px-3 py-1 bg-blue-950
+                 text-white rounded"
               >
                 Edit
               </button>

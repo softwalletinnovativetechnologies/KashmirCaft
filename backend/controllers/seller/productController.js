@@ -20,7 +20,7 @@ export const addProduct = async (req, res) => {
       // ✅ SAFE IMAGE
       images:
         req.file && req.file.filename
-          ? [`http://localhost:5000/uploads/${req.file.filename}`]
+          ? [`${import.meta.env.VITE_API_URL}/uploads/${req.file.filename}`]
           : [],
 
       seller: req.user.id,
@@ -63,7 +63,7 @@ export const updateProduct = async (req, res) => {
 
     if (req.file && req.file.filename) {
       updateData.images = [
-        `http://localhost:5000/uploads/${req.file.filename}`,
+        `${import.meta.env.VITE_API_URL}/uploads/${req.file.filename}`,
       ];
     }
 

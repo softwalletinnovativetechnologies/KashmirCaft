@@ -44,7 +44,6 @@ export default function Seller() {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#dce9e8] via-[#e8f0ef] to-[#d8e2dd]">
-
       {/* Background */}
       <div
         className="fixed inset-0 bg-cover bg-center z-[-3]"
@@ -55,12 +54,9 @@ export default function Seller() {
       <Navbar />
 
       <div className="mx-3 md:mx-6 mt-4 rounded-[34px] overflow-hidden bg-[#eef4f3]/80 backdrop-blur-xl border border-[#ffffff60] shadow-[0_20px_70px_rgba(0,0,0,0.12)]">
-
         {/* HERO */}
-        <section className="relative min-h-[95vh] flex items-center px-6 md:px-12 py-20">
-
-          <div className="grid md:grid-cols-2 gap-14 items-center w-full">
-
+        <section className="relative min-h-auto md:min-h-[95vh] flex items-center px-4 md:px-12 py-12 md:py-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14 items-center w-full">
             {/* LEFT */}
             <motion.div
               initial={{ opacity: 0, x: -80 }}
@@ -71,7 +67,7 @@ export default function Seller() {
                 Become a Seller
               </p>
 
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif text-[#315765] leading-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-6xl font-serif text-[#315765] leading-tight text-center md:text-left">
                 Sell Your Kashmiri Products
                 <span className="block bg-gradient-to-r from-[#315765] via-[#74A8A4] to-[#7F5430] bg-clip-text text-transparent">
                   For Free
@@ -84,12 +80,12 @@ export default function Seller() {
                 className="h-[3px] bg-gradient-to-r from-[#7F5430] via-[#74A8A4] to-transparent rounded-full mt-6 mb-6"
               />
 
-              <p className="text-[#475569] text-lg leading-relaxed max-w-xl">
-                Join KashmirCraft marketplace and grow your shop online with free
-                registration, premium branding and nationwide buyers.
+              <p className="text-[#475569] text-base md:text-lg leading-relaxed max-w-xl text-center md:text-left">
+                Join KashmirCraft marketplace and grow your shop online with
+                free registration, premium branding and nationwide buyers.
               </p>
 
-              <div className="flex flex-wrap gap-4 mt-8">
+              <div className="flex flex-col sm:flex-row gap-4 mt-8 justify-center md:justify-start">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -116,25 +112,20 @@ export default function Seller() {
               transition={{ duration: 1 }}
             >
               <div className="rounded-[34px] bg-[#eaf1f0] shadow-xl p-8 border border-[#ffffff70]">
-
                 <div className="grid grid-cols-2 gap-4">
-
                   {stats.map((item, i) => (
                     <motion.div
                       key={i}
                       whileHover={{ y: -10, scale: 1.04 }}
                       className="rounded-2xl bg-[#dce9e8] p-5 text-center shadow"
                     >
-                      <h3 className="text-3xl font-bold text-[#315765]">
+                      <h3 className="text-2xl md:text-3xl font-bold text-[#315765]">
                         {item.number}
                       </h3>
 
-                      <p className="text-sm text-gray-600 mt-2">
-                        {item.label}
-                      </p>
+                      <p className="text-sm text-gray-600 mt-2">{item.label}</p>
                     </motion.div>
                   ))}
-
                 </div>
 
                 <motion.div
@@ -147,28 +138,24 @@ export default function Seller() {
                     Grow Faster With KashmirCraft
                   </h4>
                 </motion.div>
-
               </div>
             </motion.div>
-
           </div>
         </section>
 
         {/* BENEFITS */}
         <section className="px-6 md:px-12 pb-20">
-
           <div className="text-center mb-12">
             <p className="uppercase tracking-[4px] text-[#7F5430] text-sm">
               Why Join Us
             </p>
 
-            <h2 className="text-4xl font-serif text-[#315765] mt-3">
+            <h2 className="text-3xl md:text-4xl font-serif text-[#315765] mt-3">
               Premium Seller Benefits
             </h2>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {benefits.map((item, i) => (
               <motion.div
                 key={i}
@@ -190,21 +177,18 @@ export default function Seller() {
                 </p>
               </motion.div>
             ))}
-
           </div>
         </section>
 
         {/* STEPS */}
         <section className="px-6 md:px-12 pb-20">
-
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-serif text-[#315765]">
+            <h2 className="text-3xl md:text-4xl font-serif text-[#315765]">
               Start Selling In 4 Easy Steps
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-4 gap-6">
-
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {steps.map((step, i) => (
               <motion.div
                 key={i}
@@ -220,25 +204,22 @@ export default function Seller() {
                 </h3>
               </motion.div>
             ))}
-
           </div>
         </section>
 
         {/* CTA */}
-        <section className="mx-6 mb-20 rounded-[34px] overflow-hidden bg-gradient-to-r from-[#315765] via-[#74A8A4] to-[#7F5430] text-white text-center px-6 py-20">
-
+        <section className="mx-3 md:mx-6 mb-12 md:mb-20 rounded-[34px] overflow-hidden bg-gradient-to-r from-[#315765] via-[#74A8A4] to-[#7F5430] text-white text-center px-4 md:px-6 py-12 md:py-20">
+          {" "}
           <motion.h2
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-5xl font-serif"
+            className="text-3xl md:text-5xl font-serif"
           >
             Ready To Start Selling?
           </motion.h2>
-
           <p className="mt-4 text-lg text-white/90">
             Join free today and grow your business with KashmirCraft.
           </p>
-
           <motion.button
             whileHover={{ scale: 1.05 }}
             onClick={() => navigate("/auth")}
@@ -246,14 +227,13 @@ export default function Seller() {
           >
             Register Now
           </motion.button>
-
         </section>
 
         {/* Footer */}
-        <footer className="py-7 text-center text-[#315765] bg-[#dce9e8]">
-          © 2026 Softwallet Innovative Technologies | KashmirCraft Marketplace. All rights reserved.
+        <footer className="py-5 px-4 text-center text-sm md:text-base text-[#315765] bg-[#dce9e8]">
+          © 2026 Softwallet Innovative Technologies | KashmirCraft Marketplace.
+          All rights reserved.
         </footer>
-
       </div>
     </div>
   );

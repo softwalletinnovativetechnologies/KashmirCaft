@@ -11,9 +11,12 @@ const ProductList = () => {
   const token = localStorage.getItem("token");
 
   const fetchData = async () => {
-    const res = await axios.get("http://localhost:5000/api/seller/products", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/seller/products`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    );
     setProducts(res.data);
   };
 
@@ -22,9 +25,12 @@ const ProductList = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:5000/api/seller/products/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    await axios.delete(
+      `${import.meta.env.VITE_API_URL}/seller/products/${id}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    );
     fetchData();
   };
 

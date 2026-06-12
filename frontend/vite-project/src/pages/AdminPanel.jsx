@@ -49,7 +49,7 @@ export default function AdminPanel() {
       console.log("No token found");
       return;
     }
-fetchSubscribers();
+    fetchSubscribers();
     fetchVendors();
     fetchProducts();
     fetchOrders();
@@ -57,29 +57,26 @@ fetchSubscribers();
   }, [token]);
 
   // ================= FETCH =================
-const fetchSubscribers = async () => {
-  try {
-    const token = localStorage.getItem("token");
+  const fetchSubscribers = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-    const res = await fetch(
-      "http://localhost:5000/api/subscribers/admin",
-      {
+      const res = await fetch( `${import.meta.env.VITE_API_URL}/subscribers/admin`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
-    );
+      });
 
-    const data = await res.json();
-console.log("SUBSCRIBERS DATA =", data);
-    setSubscribers(data);
-  } catch (err) {
-    console.log(err);
-  }
-};
+      const data = await res.json();
+      console.log("SUBSCRIBERS DATA =", data);
+      setSubscribers(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const fetchVendors = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/admin/vendors", {
+      const res = await fetch( `${import.meta.env.VITE_API_URL}/admin/vendors`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -100,7 +97,7 @@ console.log("SUBSCRIBERS DATA =", data);
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/admin/products", {
+      const res = await fetch( `${import.meta.env.VITE_API_URL}/admin/products`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -121,7 +118,7 @@ console.log("SUBSCRIBERS DATA =", data);
 
   const fetchOrders = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/admin/orders", {
+      const res = await fetch( `${import.meta.env.VITE_API_URL}/admin/orders`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -142,7 +139,7 @@ console.log("SUBSCRIBERS DATA =", data);
 
   const fetchStats = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/admin/dashboard", {
+      const res = await fetch( `${import.meta.env.VITE_API_URL}/admin/dashboard`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -154,7 +151,7 @@ console.log("SUBSCRIBERS DATA =", data);
       }
 
       const data = await res.json();
-console.log("ADMIN STATS =", data);
+      console.log("ADMIN STATS =", data);
       setStats(data || {});
     } catch (err) {
       console.log(err);
@@ -165,7 +162,7 @@ console.log("ADMIN STATS =", data);
 
   const approveVendor = async (id) => {
     try {
-      await fetch(`http://localhost:5000/api/admin/vendors/approve/${id}`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/admin/vendors/approve/${id}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -180,7 +177,7 @@ console.log("ADMIN STATS =", data);
 
   const rejectVendor = async (id) => {
     try {
-      await fetch(`http://localhost:5000/api/admin/vendors/reject/${id}`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/admin/vendors/reject/${id}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -195,7 +192,7 @@ console.log("ADMIN STATS =", data);
 
   const blockVendor = async (id) => {
     try {
-      await fetch(`http://localhost:5000/api/admin/vendors/block/${id}`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/admin/vendors/block/${id}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -214,7 +211,7 @@ console.log("ADMIN STATS =", data);
 
       if (!confirmDelete) return;
 
-      await fetch(`http://localhost:5000/api/admin/products/${id}`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/admin/products/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -228,7 +225,7 @@ console.log("ADMIN STATS =", data);
   };
   const markSellerPaid = async (id) => {
     try {
-      await fetch(`http://localhost:5000/api/admin/orders/${id}/pay-seller`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/admin/orders/${id}/pay-seller`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -275,20 +272,19 @@ console.log("ADMIN STATS =", data);
   ];
 
   return (
-    
-    <div className="min-h-screen bg-[#e5eef0] flex text-[#17263b]">
-      
+    <div className="min-h-screen bg-[#e5eef0] flex flex-col lg:flex-row text-[#17263b]">
       {/* SIDEBAR */}
-      <div className="w-[280px] bg-[#16555c] text-white p-6 flex flex-col justify-between shadow-2xl sticky top-0 h-screen">
+      <div className="w-full lg:w-[280px] bg-[#16555c] text-white p-4 lg:p-6 flex flex-col justify-between shadow-2xl lg:sticky top-0 lg:h-screen">
+        {" "}
         <div>
           <h1 className="text-4xl font-bold mb-12 tracking-tight">
             KashmirCraft
           </h1>
-          <div className="space-y-4">
+          <div className="grid grid-cols-2 lg:grid-cols-1 gap-3">
             {[
               {
                 name: "Dashboard",
-                icon: <LayoutDashboard size={20} />
+                icon: <LayoutDashboard size={20} />,
               },
               {
                 name: "Vendors",
@@ -303,9 +299,9 @@ console.log("ADMIN STATS =", data);
                 icon: <Package size={20} />,
               },
               {
-  name: "Subscribers",
-  icon: <Users size={20} />,
-},
+                name: "Subscribers",
+                icon: <Users size={20} />,
+              },
             ].map((item) => (
               <button
                 key={item.name}
@@ -322,10 +318,9 @@ console.log("ADMIN STATS =", data);
             ))}
           </div>
         </div>
-
         <button
           onClick={logout}
-          className="flex items-center justify-center gap-3 px-5 py-5 rounded-2xl bg-red-500 hover:bg-red-600 transition-all text-xl"
+          className="mt-4 lg:mt-0 flex items-center justify-center gap-3 px-5 py-3 rounded-2xl bg-red-500 hover:bg-red-600 transition-all text-xl"
         >
           <LogOut size={24} />
           Logout
@@ -333,11 +328,11 @@ console.log("ADMIN STATS =", data);
       </div>
 
       {/* MAIN */}
-      <div className="flex-1 p-10 overflow-y-auto">
+      <div className="flex-1 p-4 md:p-6 lg:p-10 overflow-y-auto">
         {/* TOP */}
         <div className="flex justify-between items-center mb-10 flex-wrap gap-5">
           <div>
-            <h2 className="text-5xl font-bold text-[#25424d] tracking-tight">
+            <h2 className="text-3xl md:text-5xl font-bold text-[#25424d] tracking-tight">
               {active}
             </h2>
 
@@ -346,29 +341,28 @@ console.log("ADMIN STATS =", data);
             </p>
           </div>
 
-         <div className="flex items-center gap-4">
-  <button
-    onClick={() => navigate("/")}
-    className="px-5 py-3 bg-white border border-[#315765] text-[#315765] rounded-2xl shadow hover:bg-[#315765] hover:text-white transition-all"
-  >
-    ← Back to Home
-  </button>
-
-</div>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => navigate("/")}
+              className="px-5 py-3 bg-white border border-[#315765] text-[#315765] rounded-2xl shadow hover:bg-[#315765] hover:text-white transition-all"
+            >
+              ← Back to Home
+            </button>
+          </div>
         </div>
 
         {/* DASHBOARD */}
         {active === "Dashboard" && (
           <>
             {/* STATS */}
-            <div className="grid md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-6">
               <motion.div
                 whileHover={{ y: -5 }}
                 className="bg-white rounded-[32px] p-7 shadow-lg"
               >
                 <p className="text-gray-500 text-lg">Pending Vendors</p>
 
-                <h3 className="text-4xl font-bold text-yellow-500 mt-3">
+                <h3 className="text-2xl md:text-4xl font-bold text-[#315765]">
                   {pendingCount}
                 </h3>
               </motion.div>
@@ -386,7 +380,7 @@ console.log("ADMIN STATS =", data);
 
               <motion.div
                 whileHover={{ y: -5 }}
-                className="bg-white rounded-[32px] p-7 shadow-lg"
+                className="bg-white rounded-[36px] p-4 md:p-10 shadow-xl mt-10"
               >
                 <p className="text-gray-500 text-lg">Rejected Vendors</p>
 
@@ -402,9 +396,9 @@ console.log("ADMIN STATS =", data);
                 <p className="text-gray-500 text-lg">Total Revenue</p>
 
                 <h3 className="text-4xl font-bold text-[#315765] mt-3 flex items-center gap-2">
-  <IndianRupee size={38} />
-  {Number(stats.totalRevenue || 0).toLocaleString("en-IN")}
-</h3>
+                  <IndianRupee size={38} />
+                  {Number(stats.totalRevenue || 0).toLocaleString("en-IN")}
+                </h3>
               </motion.div>
               <motion.div
                 whileHover={{ y: -5 }}
@@ -439,7 +433,7 @@ console.log("ADMIN STATS =", data);
                 <BarChart3 className="text-[#315765]" size={42} />
               </div>
 
-              <ResponsiveContainer width="100%" height={450}>
+              <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={chartData}>
                   <CartesianGrid strokeDasharray="3 3" />
 
@@ -471,7 +465,7 @@ console.log("ADMIN STATS =", data);
                 key={vendor._id}
                 className="bg-white p-7 rounded-[32px] shadow-lg"
               >
-                <div className="flex justify-between flex-wrap gap-6 items-center">
+                <div className="flex flex-col lg:flex-row justify-between gap-6 items-start lg:items-center">
                   <div>
                     <h3 className="text-2xl font-bold text-[#315765]">
                       {vendor.name}
@@ -554,7 +548,7 @@ console.log("ADMIN STATS =", data);
         {/* VENDOR DETAILS MODAL */}
         {selectedVendor && (
           <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-5">
-            <div className="bg-white w-full max-w-5xl rounded-[32px] p-8 max-h-[90vh] overflow-y-auto relative">
+            <div className="bg-white w-full max-w-5xl rounded-[32px] p-4 md:p-8"> max-h-[90vh] overflow-y-auto relative">
               <button
                 onClick={() => setSelectedVendor(null)}
                 className="absolute top-5 right-5 bg-red-500 text-white px-4 py-2 rounded-xl"
@@ -626,56 +620,56 @@ console.log("ADMIN STATS =", data);
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {selectedVendor.profileImage && (
                   <a
-                    href={`http://localhost:5000/uploads/${selectedVendor.profileImage}`}
+                    href={`${import.meta.env.VITE_API_URL}/uploads/${selectedVendor.profileImage}`}
                     target="_blank"
                     rel="noreferrer"
                   >
                     <img
-                      src={`http://localhost:5000/uploads/${selectedVendor.profileImage}`}
+                      src={`${import.meta.env.VITE_API_URL}/uploads/${selectedVendor.profileImage}`}
                       alt=""
-                      className="w-full h-40 object-cover rounded-xl border"
+                      className="w-full h-28 md:h-40 object-cover rounded-xl border"
                     />
                   </a>
                 )}
 
                 {selectedVendor.aadhaarFront && (
                   <a
-                    href={`http://localhost:5000/uploads/${selectedVendor.aadhaarFront}`}
+                    href={`${import.meta.env.VITE_API_URL}  /uploads/${selectedVendor.aadhaarFront}`}
                     target="_blank"
                     rel="noreferrer"
                   >
                     <img
-                      src={`http://localhost:5000/uploads/${selectedVendor.aadhaarFront}`}
+                      src={`${import.meta.env.VITE_API_URL}/uploads/${selectedVendor.aadhaarFront}`}
                       alt=""
-                      className="w-full h-40 object-cover rounded-xl border"
+                      className="w-full h-28 md:h-40 object-cover rounded-xl border"
                     />
                   </a>
                 )}
 
                 {selectedVendor.aadhaarBack && (
                   <a
-                    href={`http://localhost:5000/uploads/${selectedVendor.aadhaarBack}`}
+                    href={`${import.meta.env.VITE_API_URL}/uploads/${selectedVendor.aadhaarBack}`}
                     target="_blank"
                     rel="noreferrer"
                   >
                     <img
-                      src={`http://localhost:5000/uploads/${selectedVendor.aadhaarBack}`}
+                      src={`${import.meta.env.VITE_API_URL}/uploads/${selectedVendor.aadhaarBack}`}
                       alt=""
-                      className="w-full h-40 object-cover rounded-xl border"
+                      className="w-full h-28 md:h-40 object-cover rounded-xl border"
                     />
                   </a>
                 )}
 
                 {selectedVendor.panCardImage && (
                   <a
-                    href={`http://localhost:5000/uploads/${selectedVendor.panCardImage}`}
+                    href={`${import.meta.env.VITE_API_URL}/uploads/${selectedVendor.panCardImage}`}
                     target="_blank"
                     rel="noreferrer"
                   >
                     <img
-                      src={`http://localhost:5000/uploads/${selectedVendor.panCardImage}`}
+                      src={`${import.meta.env.VITE_API_URL}/uploads/${selectedVendor.panCardImage}`}
                       alt=""
-                      className="w-full h-40 object-cover rounded-xl border"
+                      className="w-full h-28 md:h-40 object-cover rounded-xl border"
                     />
                   </a>
                 )}
@@ -708,7 +702,7 @@ console.log("ADMIN STATS =", data);
         )}
         {/* PRODUCTS */}
         {active === "Products" && (
-          <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-7">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-7">
             {products.map((product) => (
               <motion.div
                 whileHover={{ y: -6 }}
@@ -718,7 +712,7 @@ console.log("ADMIN STATS =", data);
                 <img
                   src={product.images?.[0] || "https://via.placeholder.com/300"}
                   alt={product.name}
-                  className="w-full h-72 object-cover"
+                  className="w-full h-52 md:h-72 object-cover"
                 />
 
                 <div className="p-6">
@@ -766,7 +760,7 @@ console.log("ADMIN STATS =", data);
                   key={order._id}
                   className="bg-white rounded-[28px] p-6 shadow-lg"
                 >
-                  <div className="flex justify-between flex-wrap gap-5">
+                  <div className="flex flex-col lg:flex-row justify-between gap-5">
                     <div>
                       <h3 className="text-2xl font-bold text-[#315765]">
                         Order #{order._id.slice(-6)}
@@ -841,52 +835,46 @@ console.log("ADMIN STATS =", data);
         )}
 
         {/* SUBSCRIBERS */}
-{active === "Subscribers" && (
-  <div className="space-y-6">
+        {active === "Subscribers" && (
+          <div className="space-y-6">
+            <div className="bg-white rounded-[32px] p-8 shadow-lg">
+              <h2 className="text-3xl font-bold text-[#315765]">
+                Newsletter Subscribers
+              </h2>
 
-    <div className="bg-white rounded-[32px] p-8 shadow-lg">
-      <h2 className="text-3xl font-bold text-[#315765]">
-        Newsletter Subscribers
-      </h2>
-
-      <p className="text-gray-500 mt-2">
-        Total Subscribers: {subscribers.length}
-      </p>
-    </div>
-
-    <div className="bg-white rounded-[32px] p-8 shadow-lg">
-      {subscribers.length === 0 ? (
-        <p className="text-gray-500">
-          No Subscribers Yet
-        </p>
-      ) : (
-        <div className="space-y-4">
-          {subscribers.map((sub) => (
-            <div
-              key={sub._id}
-              className="flex justify-between items-center border-b pb-4"
-            >
-              <div>
-                <h3 className="font-semibold text-lg">
-                  {sub.email}
-                </h3>
-
-                <p className="text-gray-500 text-sm">
-                  {new Date(sub.createdAt).toLocaleDateString()}
-                </p>
-              </div>
-
-              <div className="bg-green-100 text-green-700 px-4 py-2 rounded-full">
-                Active
-              </div>
+              <p className="text-gray-500 mt-2">
+                Total Subscribers: {subscribers.length}
+              </p>
             </div>
-          ))}
-        </div>
-      )}
-    </div>
 
-  </div>
-)}
+            <div className="bg-white rounded-[32px] p-8 shadow-lg">
+              {subscribers.length === 0 ? (
+                <p className="text-gray-500">No Subscribers Yet</p>
+              ) : (
+                <div className="space-y-4">
+                  {subscribers.map((sub) => (
+                    <div
+                      key={sub._id}
+                      className="flex justify-between items-center border-b pb-4"
+                    >
+                      <div>
+                        <h3 className="font-semibold text-lg">{sub.email}</h3>
+
+                        <p className="text-gray-500 text-sm">
+                          {new Date(sub.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+
+                      <div className="bg-green-100 text-green-700 px-4 py-2 rounded-full">
+                        Active
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

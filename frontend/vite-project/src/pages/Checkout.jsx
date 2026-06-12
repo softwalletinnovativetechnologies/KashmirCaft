@@ -87,7 +87,7 @@ export default function Checkout() {
     if (!res) return alert("Razorpay failed");
 
     const orderRes = await fetch(
-      "http://localhost:5000/api/seller/payments/create-order",
+      `${import.meta.env.VITE_API_URL}/seller/payments/create-order`,
       {
         method: "POST",
         headers: {
@@ -108,7 +108,7 @@ export default function Checkout() {
       order_id: data.order.id,
 
       handler: async function (response) {
-        await fetch("http://localhost:5000/api/seller/payments/verify", {
+        await fetch(`${import.meta.env.VITE_API_URL}/seller/payments/verify`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

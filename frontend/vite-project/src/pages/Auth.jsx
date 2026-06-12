@@ -201,7 +201,7 @@ const Auth = () => {
       >
         {/* TITLE */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-[#2d2424]">
+          <h1 className="text-3xl font-bold text-[#312626]">
             {isLogin ? "Welcome Back" : "Create Account"}
           </h1>
 
@@ -223,7 +223,7 @@ const Auth = () => {
                 onClick={() => setRole(r)}
                 className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                   role === r
-                    ? "bg-gradient-to-r from-[#7F5430] to-[#c8a97e] text-white shadow-lg"
+                    ? "bg-gradient-to-r from-[#30767f] to-[#75aeb3] text-white shadow-lg"
                     : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                 }`}
               >
@@ -242,7 +242,7 @@ const Auth = () => {
               placeholder="Full Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#c8a97e]"
+              className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#406375]"
             />
           )}
 
@@ -252,7 +252,7 @@ const Auth = () => {
             placeholder="Email Address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#c8a97e]"
+            className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#3c7e88]"
           />
 
           {/* PASSWORD */}
@@ -261,7 +261,7 @@ const Auth = () => {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#c8a97e]"
+            className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#3d7186]"
           />
 
           {/* 🔥 SELLER EXTRA */}
@@ -274,7 +274,7 @@ const Auth = () => {
                 className="space-y-4 overflow-hidden"
               >
                 <div className="pt-2">
-                  <h3 className="font-semibold text-[#7F5430] mb-2">
+                  <h3 className="font-semibold text-[#45757e] mb-2">
                     Seller Verification
                   </h3>
                 </div>
@@ -284,7 +284,7 @@ const Auth = () => {
                   placeholder="Phone Number"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#c8a97e]"
+                  className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#4a929d]"
                 />
 
                 <input
@@ -292,7 +292,7 @@ const Auth = () => {
                   placeholder="Shop Name"
                   value={shopName}
                   onChange={(e) => setShopName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#c8a97e]"
+                  className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#4499a1]"
                 />
 
                 <input
@@ -300,7 +300,7 @@ const Auth = () => {
                   placeholder="Aadhaar Number"
                   value={aadhaarNumber}
                   onChange={(e) => setAadhaarNumber(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#c8a97e]"
+                  className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#4499a1]"
                 />
 
                 <input
@@ -308,9 +308,9 @@ const Auth = () => {
                   placeholder="PAN Number"
                   value={panNumber}
                   onChange={(e) => setPanNumber(e.target.value.toUpperCase())}
-                  className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#c8a97e]"
+                  className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#4499a1]"
                 />
-                <h3 className="font-semibold text-[#7F5430]">
+                <h3 className="font-semibold text-[#2c3857]">
                   Bank & Payout Details
                 </h3>
 
@@ -319,7 +319,7 @@ const Auth = () => {
                   placeholder="Account Holder Name"
                   value={accountHolderName}
                   onChange={(e) => setAccountHolderName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#c8a97e]"
+                  className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#4499a1]"
                 />
 
                 <input
@@ -327,7 +327,7 @@ const Auth = () => {
                   placeholder="Bank Name"
                   value={bankName}
                   onChange={(e) => setBankName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#c8a97e]"
+                  className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#4499a1]"
                 />
 
                 <input
@@ -335,7 +335,7 @@ const Auth = () => {
                   placeholder="Account Number"
                   value={accountNumber}
                   onChange={(e) => setAccountNumber(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#c8a97e]"
+                  className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#4499a1]"
                 />
 
                 <input
@@ -343,7 +343,7 @@ const Auth = () => {
                   placeholder="IFSC Code"
                   value={ifscCode}
                   onChange={(e) => setIfscCode(e.target.value.toUpperCase())}
-                  className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#c8a97e]"
+                  className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#4499a1]"
                 />
 
                 <input
@@ -351,20 +351,20 @@ const Auth = () => {
                   placeholder="UPI ID"
                   value={upiId}
                   onChange={(e) => setUpiId(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#c8a97e]"
+                  className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#4499a1]"
                 />
                 <input
                   type="text"
                   placeholder="GST Number (Optional)"
                   value={gstNumber}
                   onChange={(e) => setGstNumber(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#c8a97e]"
+                  className="w-full px-4 py-3 rounded-2xl bg-white text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#4499a1]"
                 />
 
                 {/* FILE UPLOADS */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="bg-[#faf7f2] border border-dashed border-[#c8a97e] rounded-2xl p-4">
-                    <label className="text-sm font-medium text-[#7F5430]">
+                  <div className="bg-[#195e5a] border border-dashed border-[#6cbab6] rounded-2xl p-4">
+                    <label className="text-sm font-medium text-[#2c3857]">
                       Aadhaar Front
                     </label>
 
@@ -376,8 +376,8 @@ const Auth = () => {
                     />
                   </div>
 
-                  <div className="bg-[#faf7f2] border border-dashed border-[#c8a97e] rounded-2xl p-4">
-                    <label className="text-sm font-medium text-[#7F5430]">
+                  <div className="bg-[#195e5a] border border-dashed border-[#6cbab6] rounded-2xl p-4">
+                    <label className="text-sm font-medium text-[#2c3857]">
                       Aadhaar Back
                     </label>
 
@@ -389,8 +389,8 @@ const Auth = () => {
                     />
                   </div>
 
-                  <div className="bg-[#faf7f2] border border-dashed border-[#c8a97e] rounded-2xl p-4">
-                    <label className="text-sm font-medium text-[#7F5430]">
+                  <div className="bg-[#195e5a] border border-dashed border-[#6cbab6] rounded-2xl p-4">
+                    <label className="text-sm font-medium text-[#2c3857]">
                       PAN Card
                     </label>
 
@@ -402,8 +402,8 @@ const Auth = () => {
                     />
                   </div>
 
-                  <div className="bg-[#faf7f2] border border-dashed border-[#c8a97e] rounded-2xl p-4">
-                    <label className="text-sm font-medium text-[#7F5430]">
+                  <div className="bg-[#195e5a] border border-dashed border-[#6cbab6] rounded-2xl p-4">
+                    <label className="text-sm font-medium text-[#2c3857]">
                       Profile Image
                     </label>
 
@@ -427,7 +427,7 @@ const Auth = () => {
             disabled={loading}
             onClick={handleSubmit}
             className="w-full py-3 rounded-2xl text-white font-semibold 
-            bg-gradient-to-r from-[#7F5430] to-[#c8a97e] 
+            bg-gradient-to-r from-[#2c728c] to-[#7b88db] 
             shadow-lg hover:shadow-xl transition-all disabled:opacity-60"
           >
             {loading
@@ -449,7 +449,7 @@ const Auth = () => {
               setIsLogin(!isLogin);
               resetFields();
             }}
-            className="ml-2 text-[#c8a97e] cursor-pointer font-semibold hover:underline"
+            className="ml-2 text-[#296a73] cursor-pointer font-semibold hover:underline"
           >
             {isLogin ? "Register" : "Login"}
           </span>

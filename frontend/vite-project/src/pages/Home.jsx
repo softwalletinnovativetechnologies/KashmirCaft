@@ -16,8 +16,8 @@ import {
 
 export default function Home() {
   const slides = ["/1im.png", "/2im.png", "/3im.png"];
- const navigate = useNavigate();
- const [email, setEmail] = useState("");
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
   const features = [
     { icon: "✨", title: "Authentic Products", sub: "100% Original Handmade" },
     { icon: "🤝", title: "Support Artisans", sub: "Empowering Kashmir Crafts" },
@@ -30,37 +30,31 @@ export default function Home() {
     { img: "/2im.png", name: "Dry Fruits Box", price: "₹1,999" },
     { img: "/3im.png", name: "Kashmiri Carpet", price: "₹12,999" },
   ];
-const handleSubscribe = async () => {
-  try {
-    const res = await fetch(
-      "http://localhost:5000/api/subscribers",
-      {
+  const handleSubscribe = async () => {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/subscribers`, {
         method: "POST",
         headers: {
-          "Content-Type":
-            "application/json",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email,
         }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        return alert(data.message);
       }
-    );
 
-    const data = await res.json();
+      alert("Subscribed Successfully 🎉");
 
-    if (!res.ok) {
-      return alert(data.message);
+      setEmail("");
+    } catch (error) {
+      console.log(error);
     }
-
-    alert(
-      "Subscribed Successfully 🎉"
-    );
-
-    setEmail("");
-  } catch (error) {
-    console.log(error);
-  }
-};
+  };
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#edf2ee]">
@@ -164,18 +158,18 @@ const handleSubscribe = async () => {
                 className="flex flex-wrap gap-4 mt-8"
               >
                 <button
-  onClick={() => navigate("/shop")}
-  className="px-8 py-4 rounded-xl bg-gradient-to-r from-[#8b3a16] to-[#c1bdb3] text-white font-semibold hover:scale-105 transition duration-300 shadow-xl"
->
-  Explore Collection
-</button>
+                  onClick={() => navigate("/shop")}
+                  className="px-8 py-4 rounded-xl bg-gradient-to-r from-[#8b3a16] to-[#c1bdb3] text-white font-semibold hover:scale-105 transition duration-300 shadow-xl"
+                >
+                  Explore Collection
+                </button>
 
                 <button
-  onClick={() => navigate("/shop")}
-  className="px-8 py-4 rounded-xl border border-white/70 text-white hover:bg-white hover:text-black transition duration-300"
->
-  Shop Now
-</button>
+                  onClick={() => navigate("/shop")}
+                  className="px-8 py-4 rounded-xl border border-white/70 text-white hover:bg-white hover:text-black transition duration-300"
+                >
+                  Shop Now
+                </button>
               </motion.div>
             </motion.div>
           </div>
@@ -254,9 +248,10 @@ const handleSubscribe = async () => {
                 generations of craftsmanship.
               </p>
 
-              <button 
-              onClick={() => navigate("/shop")}
-              className="mt-8 px-7 py-3 rounded-full bg-[#c1bdb3] text-white hover:bg-black transition">
+              <button
+                onClick={() => navigate("/shop")}
+                className="mt-8 px-7 py-3 rounded-full bg-[#c1bdb3] text-white hover:bg-black transition"
+              >
                 Explore Collection
               </button>
             </motion.div>
@@ -270,9 +265,10 @@ const handleSubscribe = async () => {
               Featured Products
             </h2>
 
-            <button 
-            onClick={() => navigate("/shop")}
-            className="text-[#7a3114] font-medium hover:underline">
+            <button
+              onClick={() => navigate("/shop")}
+              className="text-[#7a3114] font-medium hover:underline"
+            >
               View All
             </button>
           </div>
@@ -322,9 +318,10 @@ const handleSubscribe = async () => {
               Luxury, heritage and beauty in every order.
             </p>
 
-            <button 
-            onClick={() => navigate("/shop")}
-            className="mt-7 px-8 py-3 bg-[#c1bdb3] text-black rounded-full hover:scale-105 transition">
+            <button
+              onClick={() => navigate("/shop")}
+              className="mt-7 px-8 py-3 bg-[#c1bdb3] text-black rounded-full hover:scale-105 transition"
+            >
               Explore Now
             </button>
           </div>
@@ -332,131 +329,114 @@ const handleSubscribe = async () => {
 
         {/* ================================================= NEWSLETTER ================================================= */}
         <section className="py-24 px-6 bg-gradient-to-r from-[#173a2a] to-[#315765] text-white text-center">
-  <p className="uppercase tracking-[4px] text-sm text-[#c1bdb3]">
-    Stay Updated
-  </p>
+          <p className="uppercase tracking-[4px] text-sm text-[#c1bdb3]">
+            Stay Updated
+          </p>
 
-  <h2 className="text-4xl md:text-5xl font-serif mt-4">
-    Join The KashmirCraft Family
-  </h2>
+          <h2 className="text-4xl md:text-5xl font-serif mt-4">
+            Join The KashmirCraft Family
+          </h2>
 
-  <p className="max-w-2xl mx-auto mt-5 text-white/80">
-    Get exclusive offers, artisan stories and premium Kashmir collections
-    directly in your inbox.
-  </p>
+          <p className="max-w-2xl mx-auto mt-5 text-white/80">
+            Get exclusive offers, artisan stories and premium Kashmir
+            collections directly in your inbox.
+          </p>
 
-  <div className="mt-10 flex flex-col md:flex-row gap-4 justify-center">
-    <input
-  type="email"
-  value={email}
-  onChange={(e) =>
-    setEmail(e.target.value)
-  }
-  placeholder="Enter your email"
-  className="px-6 py-4 rounded-full w-full md:w-[420px] outline-none border border-gray-200"
-/>
+          <div className="mt-10 flex flex-col md:flex-row gap-4 justify-center">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              className="px-6 py-4 rounded-full w-full md:w-[420px] outline-none border border-gray-200"
+            />
 
-   <button
-  onClick={handleSubscribe}
-  className="px-8 py-4 rounded-full bg-[#173a2a] text-white hover:bg-black transition"
->
-  Subscribe
-</button>
-  </div>
-</section>
+            <button
+              onClick={handleSubscribe}
+              className="px-8 py-4 rounded-full bg-[#173a2a] text-white hover:bg-black transition"
+            >
+              Subscribe
+            </button>
+          </div>
+        </section>
 
         {/* FOOTER */}
         <footer className="bg-gradient-to-r from-[#173a2a] to-[#315765] text-white mt-0">
+          <div className="max-w-7xl mx-auto px-8 py-8">
+            {/* TOP ROW */}
+            <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
+              {/* LOGO */}
+              <div>
+                <h2 className="text-4xl font-serif text-[#c1bdb3]">
+                  KashmirCraft
+                </h2>
+              </div>
 
-  <div className="max-w-7xl mx-auto px-8 py-8">
+              {/* CONTACT */}
+              <div className="text-center lg:text-left">
+                <h3 className="font-semibold text-xl mb-2">Contact</h3>
 
-    {/* TOP ROW */}
-    <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
+                <p className="text-white/90">
+                  info@softwalletinnovativetechnologies.cloud
+                </p>
 
-      {/* LOGO */}
-      <div>
-        <h2 className="text-4xl font-serif text-[#c1bdb3]">
-          KashmirCraft
-        </h2>
-      </div>
+                <p className="text-white/90">+91 9596393658</p>
 
-      {/* CONTACT */}
-      <div className="text-center lg:text-left">
-        <h3 className="font-semibold text-xl mb-2">
-          Contact
-        </h3>
+                <p className="text-white/90">Kupwara, Jammu & Kashmir, India</p>
+              </div>
 
-        <p className="text-white/90">
-          info@softwalletinnovativetechnologies.cloud
-        </p>
+              {/* SOCIAL */}
+              {/* SOCIAL */}
+              <div className="text-center">
+                <h3 className="font-semibold text-xl mb-3">Follow Us</h3>
 
-        <p className="text-white/90">
-          +91 9596393658
-        </p>
+                <div className="flex gap-5 justify-center text-2xl">
+                  {/* Facebook */}
+                  <a
+                    href="https://www.facebook.com/"
+                    target="_blank"
+                    className="hover:text-[#D4AF37] transition"
+                  >
+                    <FaFacebookF />
+                  </a>
 
-        <p className="text-white/90">
-          Kupwara, Jammu & Kashmir, India
-        </p>
-      </div>
+                  {/* Instagram */}
+                  <a
+                    href="https://www.instagram.com/"
+                    target="_blank"
+                    className="hover:text-[#D4AF37] transition"
+                  >
+                    <FaInstagram />
+                  </a>
 
-      {/* SOCIAL */}
-      {/* SOCIAL */}
-<div className="text-center">
-  <h3 className="font-semibold text-xl mb-3">
-    Follow Us
-  </h3>
+                  {/* LinkedIn */}
+                  <a
+                    href="https://www.linkedin.com/company/softwallet-innovative-technologies-private-limited/"
+                    target="_blank"
+                    className="hover:text-[#D4AF37] transition"
+                  >
+                    <FaLinkedinIn />
+                  </a>
 
-  <div className="flex gap-5 justify-center text-2xl">
+                  {/* WhatsApp */}
+                  <a
+                    href="https://wa.me/919596393658"
+                    target="_blank"
+                    className="hover:text-[#25D366] transition"
+                  >
+                    <FaWhatsapp />
+                  </a>
+                </div>
+              </div>
+            </div>
 
-    {/* Facebook */}
-    <a
-      href="https://www.facebook.com/"
-      target="_blank"
-      className="hover:text-[#D4AF37] transition"
-    >
-      <FaFacebookF />
-    </a>
-
-    {/* Instagram */}
-    <a
-      href="https://www.instagram.com/"
-      target="_blank"
-      className="hover:text-[#D4AF37] transition"
-    >
-      <FaInstagram />
-    </a>
-
-    {/* LinkedIn */}
-    <a
-      href="https://www.linkedin.com/company/softwallet-innovative-technologies-private-limited/"
-      target="_blank"
-      className="hover:text-[#D4AF37] transition"
-    >
-      <FaLinkedinIn />
-    </a>
-
-    {/* WhatsApp */}
-    <a
-      href="https://wa.me/919596393658"
-      target="_blank"
-      className="hover:text-[#25D366] transition"
-    >
-      <FaWhatsapp />
-    </a>
-
-  </div>
-</div>
-
-    </div>
-
-    {/* COPYRIGHT */}
-    <div className="border-t border-white/20 mt-6 pt-4 text-center text-white/80 text-sm">
-      © 2026 Softwallet Innovative Technologies | KashmirCraft Marketplace | All Rights Reserved.
-    </div>
-
-  </div>
-
-</footer>
+            {/* COPYRIGHT */}
+            <div className="border-t border-white/20 mt-6 pt-4 text-center text-white/80 text-sm">
+              © 2026 Softwallet Innovative Technologies | KashmirCraft
+              Marketplace | All Rights Reserved.
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
   );

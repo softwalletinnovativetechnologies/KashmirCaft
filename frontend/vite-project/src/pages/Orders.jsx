@@ -12,9 +12,12 @@ export default function Orders() {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await axios.get("http://localhost:5000/api/user/orders", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/user/orders`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
 
         setOrders(res.data);
       } catch (err) {

@@ -21,7 +21,7 @@ export default function Shop() {
 
   useEffect(() => {
     const fetch = async () => {
-      const res = await axios.get("http://localhost:5000/api/products");
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/products`);
       setProducts(res.data);
     };
     fetch();
@@ -79,8 +79,8 @@ export default function Shop() {
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-10">
           {/* SIDEBAR */}
-<div className="bg-white rounded-2xl shadow-xl p-4 md:p-6">
-              <h3 className="text-lg font-semibold mb-4">Categories</h3>
+          <div className="bg-white rounded-2xl shadow-xl p-4 md:p-6">
+            <h3 className="text-lg font-semibold mb-4">Categories</h3>
 
             {CATEGORIES.map((c) => (
               <button
@@ -113,7 +113,7 @@ export default function Shop() {
 
                 <div className="p-4 md:p-5">
                   <h3 className="text-lg font-medium">{item.name}</h3>
-                 <p className="text-[#284b63] text-lg md:text-xl font-semibold mt-2">
+                  <p className="text-[#284b63] text-lg md:text-xl font-semibold mt-2">
                     ₹{item.price}
                   </p>
 

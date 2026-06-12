@@ -24,7 +24,9 @@ export default function Product() {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const res = await axios.get(`http://localhost:5000/api/products/${id}`);
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/products/${id}`,
+      );
       setProduct(res.data);
       setSelectedImage(res.data.images?.[0] || "");
     };
@@ -134,7 +136,9 @@ export default function Product() {
 
           {/* DETAILS */}
           <div>
-            <h1 className="text-4xl font-bold text-[#83c5be]">{product.name}</h1>
+            <h1 className="text-4xl font-bold text-[#83c5be]">
+              {product.name}
+            </h1>
 
             <p className="text-3xl text-[#83c5be] mt-4 font-bold">
               ₹{totalPrice}

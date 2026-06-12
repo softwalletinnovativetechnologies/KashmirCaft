@@ -32,7 +32,7 @@ const EditProductModal = ({ isOpen, onClose, product, refresh }) => {
     if (file) formData.append("image", file);
 
     await axios.put(
-      `http://localhost:5000/api/products/${product._id}`,
+      `${import.meta.env.VITE_API_URL}/products/${product._id}`,
       formData,
       {
         headers: {

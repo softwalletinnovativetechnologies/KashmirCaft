@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 
-
 import authRoutes from "./routes/authRoutes.js";
 
 import userAddressRoutes from "./routes/user/addressRoutes.js";
@@ -33,7 +32,15 @@ import { protect, isAdmin } from "./middleware/authMiddleware.js";
 const app = express();
 
 // 🔥 IMPORTANT
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://ecommerce.softwalletinnovativetechnologies.cloud",
+    ],
+    credentials: true,
+  }),
+);
 
 app.use(express.json());
 
@@ -41,10 +48,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // 🔥 STATIC UPLOADS
 app.use("/uploads", express.static("uploads"));
-app.use(
-  "/uploads",
-  express.static(path.join(process.cwd(), "uploads"))
-);
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 // ================= AUTH =================
 app.use("/api/auth", authRoutes);
@@ -58,10 +62,7 @@ app.use("/api/user/orders", userOrderRoutes);
 
 // ================= PUBLIC PRODUCTS =================
 app.use("/api/products", productRoutes);
-app.use(
-  "/api/subscribers",
-  subscriberRoutes
-);
+app.use("/api/subscribers", subscriberRoutes);
 
 // ================= SELLER =================
 app.use("/api/seller/products", protect, sellerProductRoutes);

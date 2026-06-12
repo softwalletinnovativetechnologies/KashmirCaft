@@ -45,27 +45,24 @@ router.put("/approve/:id", protect, isAdmin, async (req, res) => {
     await sendMail(
       vendor.email,
       "KashmirCraft Seller Approval",
-      `
-        <div style="font-family:sans-serif;padding:20px">
-          <h2>Hello ${vendor.name} 🎉</h2>
 
-          <p>
-            Your seller account has been
-            <b>APPROVED</b>
-            by KashmirCraft Admin.
-          </p>
+      <div style="font-family:sans-serif;padding:20px">
+        <h2>Hello ${vendor.name} 🎉</h2>
 
-          <p>
-            You can now login and start selling.
-          </p>
+        <p>
+          Your seller account has been
+          <b>APPROVED</b>
+          by KashmirCraft Admin.
+        </p>
 
-          <br/>
+        <p>You can now login and start selling.</p>
 
-          <a href="http://localhost:5173/auth">
-            Login Now
-          </a>
-        </div>
-      `,
+        <br />
+
+        <a href="https://ecommerce.softwalletinnovativetechnologies.cloud/auth">
+          Login Now
+        </a>
+      </div>,
     );
 
     res.json({
@@ -101,20 +98,17 @@ router.put("/reject/:id", protect, isAdmin, async (req, res) => {
     await sendMail(
       vendor.email,
       "KashmirCraft Seller Rejected",
-      `
-        <div style="font-family:sans-serif;padding:20px">
-          <h2>Hello ${vendor.name}</h2>
 
-          <p>
-            Your seller registration has been
-            <b>REJECTED</b>.
-          </p>
+      <div style="font-family:sans-serif;padding:20px">
+        <h2>Hello ${vendor.name}</h2>
 
-          <p>
-            Please upload valid documents and try again.
-          </p>
-        </div>
-      `,
+        <p>
+          Your seller registration has been
+          <b>REJECTED</b>.
+        </p>
+
+        <p>Please upload valid documents and try again.</p>
+      </div>,
     );
 
     res.json({
@@ -150,21 +144,18 @@ router.put("/block/:id", protect, isAdmin, async (req, res) => {
     await sendMail(
       vendor.email,
       "KashmirCraft Seller Blocked",
-      `
-        <div style="font-family:sans-serif;padding:20px">
-          <h2>Hello ${vendor.name}</h2>
 
-          <p>
-            Your seller account has been
-            <b>BLOCKED</b>
-            by KashmirCraft Admin.
-          </p>
+      <div style="font-family:sans-serif;padding:20px">
+        <h2>Hello ${vendor.name}</h2>
 
-          <p>
-            Please contact support.
-          </p>
-        </div>
-      `,
+        <p>
+          Your seller account has been
+          <b>BLOCKED</b>
+          by KashmirCraft Admin.
+        </p>
+
+        <p>Please contact support.</p>
+      </div>,
     );
 
     res.json({

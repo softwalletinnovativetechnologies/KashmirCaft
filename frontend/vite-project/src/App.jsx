@@ -12,6 +12,8 @@ import Profile from "./pages/Profile";
 import Cart from "./pages/Cart";
 import Wishlist from "./pages/Wishlist";
 import Checkout from "./pages/Checkout";
+import AIChatAssistant from "./components/AIChatAssistant";
+
 function App() {
   return (
     <BrowserRouter>
@@ -30,6 +32,9 @@ function App() {
         <Route path="/admin" element={<AdminPanel />} />
         <Route path="/checkout" element={<Checkout />} />
       </Routes>
+
+      {/* AI Chat Assistant */}
+      <AIChatAssistant />
     </BrowserRouter>
   );
 }

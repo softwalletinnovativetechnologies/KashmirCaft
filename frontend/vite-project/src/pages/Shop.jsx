@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import LoginPopup from "../components/LoginPopup";
+import { smartSearchFilter } from "../utils/smartSearch";
 
 const CATEGORIES = ["All", "Pashmina", "Carpets", "Dry Fruits", "Handicrafts"];
 const normalize = (str) => (str || "").toLowerCase().replace(/\s+/g, "");
@@ -21,22 +22,41 @@ export default function Shop() {
 
   useEffect(() => {
     const fetch = async () => {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/products`);
-      setProducts(res.data);
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/products`);
+        // Handle different possible API response shapes safely
+        const data = res.data;
+        if (Array.isArray(data)) {
+          setProducts(data);
+        } else if (Array.isArray(data.products)) {
+          setProducts(data.products);
+        } else if (Array.isArray(data.data)) {
+          setProducts(data.data);
+        } else {
+          console.error("Unexpected products API response:", data);
+          setProducts([]);
+        }
+      } catch (err) {
+        console.error("Failed to fetch products:", err);
+        setProducts([]);
+      }
     };
     fetch();
   }, []);
 
   const filtered = useMemo(() => {
-    return products.filter((p) => {
+    const safeProducts = Array.isArray(products) ? products : [];
+
+    // First filter by category and price (fast, simple checks)
+    const categoryAndPriceFiltered = safeProducts.filter((p) => {
       const matchCategory =
         category === "All" || normalize(p.category) === normalize(category);
-      const matchSearch = (p.name || "")
-        .toLowerCase()
-        .includes(search.toLowerCase());
       const matchPrice = p.price <= price;
-      return matchCategory && matchSearch && matchPrice;
+      return matchCategory && matchPrice;
     });
+
+    // Then apply smart search ranking on top (handles typos, synonyms, relevance)
+    return smartSearchFilter(categoryAndPriceFiltered, search);
   }, [search, category, price, products]);
 
   const addToCart = (p) => {

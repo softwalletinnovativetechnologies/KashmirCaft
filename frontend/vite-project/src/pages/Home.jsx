@@ -1,12 +1,14 @@
 import Navbar from "../components/Navbar";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-fade";
 import { Autoplay, EffectFade } from "swiper/modules";
+import axios from "axios";
+import { getTrendingProducts } from "../utils/recommendations";
 import {
   FaFacebookF,
   FaInstagram,
@@ -18,6 +20,63 @@ export default function Home() {
   const slides = ["/1im.png", "/2im.png", "/3im.png"];
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
+
+  const [realProducts, setRealProducts] = useState([]);
+  const [personalizedLabel, setPersonalizedLabel] = useState(
+    "Featured Products"
+  );
+
+  useEffect(() => {
+    const loadPersonalized = async () => {
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/products`);
+        const allProducts = res.data;
+
+        const user = JSON.parse(localStorage.getItem("user") || "null");
+        const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+        const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+        if (user && (wishlist.length > 0 || cart.length > 0)) {
+          const interactedCategories = [
+            ...wishlist.map((p) => (p.category || "").toLowerCase()),
+            ...cart.map((p) => (p.category || "").toLowerCase()),
+          ].filter(Boolean);
+
+          if (interactedCategories.length > 0) {
+            const freq = {};
+            for (const cat of interactedCategories) {
+              freq[cat] = (freq[cat] || 0) + 1;
+            }
+            const topCategory = Object.keys(freq).sort(
+              (a, b) => freq[b] - freq[a]
+            )[0];
+
+            const personalized = allProducts
+              .filter((p) => (p.category || "").toLowerCase() === topCategory)
+              .slice(0, 3);
+
+            if (personalized.length > 0) {
+              setRealProducts(personalized);
+              setPersonalizedLabel(
+                "Recommended For You - " +
+                  topCategory.charAt(0).toUpperCase() +
+                  topCategory.slice(1)
+              );
+              return;
+            }
+          }
+        }
+
+        setRealProducts(getTrendingProducts(allProducts, 3));
+        setPersonalizedLabel("Featured Products");
+      } catch (err) {
+        console.log("Personalization error:", err);
+      }
+    };
+
+    loadPersonalized();
+  }, []);
+
   const features = [
     { icon: "✨", title: "Authentic Products", sub: "100% Original Handmade" },
     { icon: "🤝", title: "Support Artisans", sub: "Empowering Kashmir Crafts" },
@@ -30,6 +89,7 @@ export default function Home() {
     { img: "/2im.png", name: "Dry Fruits Box", price: "₹1,999" },
     { img: "/3im.png", name: "Kashmiri Carpet", price: "₹12,999" },
   ];
+
   const handleSubscribe = async () => {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/subscribers`, {
@@ -56,9 +116,11 @@ export default function Home() {
     }
   };
 
+  const displayProducts = realProducts.length > 0 ? realProducts : products;
+  const isPersonalized = personalizedLabel.indexOf("Recommended") === 0;
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#edf2ee]">
-      {/* Background */}
       <div
         className="fixed inset-0 bg-cover bg-center z-[-3]"
         style={{ backgroundImage: "url('/bgw.png')" }}
@@ -68,7 +130,6 @@ export default function Home() {
       <Navbar />
 
       <div className="mx-3 md:mx-6 mt-4 rounded-[34px] overflow-hidden bg-white/20 backdrop-blur-xl border border-white/40 shadow-[0_20px_70px_rgba(0,0,0,0.12)]">
-        {/* ================================================= HERO ================================================= */}
         <section className="relative h-[100vh] overflow-hidden">
           <Swiper
             modules={[Autoplay, EffectFade]}
@@ -91,10 +152,8 @@ export default function Home() {
             ))}
           </Swiper>
 
-          {/* Overlay */}
           <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/40 to-black/10 z-10" />
 
-          {/* Hero Content */}
           <div className="absolute inset-0 z-20 flex items-center px-6 md:px-14 lg:px-24">
             <motion.div
               initial={{ opacity: 0, x: -80 }}
@@ -175,7 +234,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ================= STRIP HERO + ABOUT KE BEECH ================= */}
         <div className="relative z-30 px-4 md:px-8 -mt-10 md:-mt-12">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -210,7 +268,6 @@ export default function Home() {
           </motion.div>
         </div>
 
-        {/* ================================================= ABOUT ================================================= */}
         <section className="mt-16 px-6 md:px-12 py-20">
           <div className="grid md:grid-cols-2 gap-14 items-center">
             <motion.div
@@ -258,11 +315,15 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ================================================= PRODUCTS ================================================= */}
         <section className="px-6 md:px-12 pb-20">
           <div className="flex justify-between items-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-serif text-[#173a2a]">
-              Featured Products
+            <h2 className="text-3xl md:text-4xl font-serif text-[#173a2a] flex items-center gap-3 flex-wrap">
+              <span>{personalizedLabel}</span>
+              {isPersonalized && (
+                <span className="text-sm font-sans font-normal bg-amber-100 text-amber-700 px-3 py-1 rounded-full align-middle">
+                  🤖 AI Picked
+                </span>
+              )}
             </h2>
 
             <button
@@ -274,18 +335,21 @@ export default function Home() {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {products.map((item, index) => (
+            {displayProducts.map((item, index) => (
               <motion.div
-                key={index}
+                key={item._id || index}
                 whileHover={{ y: -10 }}
                 initial={{ opacity: 0, y: 60 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="rounded-3xl overflow-hidden bg-white/80 backdrop-blur-xl shadow-lg group"
+                onClick={() => {
+                  if (item._id) navigate(`/product/${item._id}`);
+                }}
+                className="rounded-3xl overflow-hidden bg-white/80 backdrop-blur-xl shadow-lg group cursor-pointer"
               >
                 <div className="overflow-hidden">
                   <img
-                    src={item.img}
+                    src={item.img || (item.images && item.images[0])}
                     className="h-64 w-full object-cover group-hover:scale-110 transition duration-500"
                   />
                 </div>
@@ -294,13 +358,19 @@ export default function Home() {
                   <h3 className="text-xl font-semibold text-[#173a2a]">
                     {item.name}
                   </h3>
+                  {item.price && (
+                    <p className="text-[#7a3114] font-medium mt-1">
+                      {typeof item.price === "number"
+                        ? "₹" + item.price
+                        : item.price}
+                    </p>
+                  )}
                 </div>
               </motion.div>
             ))}
           </div>
         </section>
 
-        {/* ================================================= BANNER ================================================= */}
         <section className="mx-6 mb-20 rounded-[34px] overflow-hidden relative h-[55vh]">
           <img
             src="/1im.png"
@@ -327,7 +397,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ================================================= NEWSLETTER ================================================= */}
         <section className="py-24 px-6 bg-gradient-to-r from-[#173a2a] to-[#315765] text-white text-center">
           <p className="uppercase tracking-[4px] text-sm text-[#c1bdb3]">
             Stay Updated
@@ -360,19 +429,15 @@ export default function Home() {
           </div>
         </section>
 
-        {/* FOOTER */}
         <footer className="bg-gradient-to-r from-[#173a2a] to-[#315765] text-white mt-0">
           <div className="max-w-7xl mx-auto px-8 py-8">
-            {/* TOP ROW */}
             <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
-              {/* LOGO */}
               <div>
                 <h2 className="text-4xl font-serif text-[#c1bdb3]">
                   KashmirCraft
                 </h2>
               </div>
 
-              {/* CONTACT */}
               <div className="text-center lg:text-left">
                 <h3 className="font-semibold text-xl mb-2">Contact</h3>
 
@@ -385,43 +450,41 @@ export default function Home() {
                 <p className="text-white/90">Kupwara, Jammu & Kashmir, India</p>
               </div>
 
-              {/* SOCIAL */}
-              {/* SOCIAL */}
               <div className="text-center">
                 <h3 className="font-semibold text-xl mb-3">Follow Us</h3>
 
                 <div className="flex gap-5 justify-center text-2xl">
-                  {/* Facebook */}
                   <a
                     href="https://www.facebook.com/"
                     target="_blank"
+                    rel="noreferrer"
                     className="hover:text-[#D4AF37] transition"
                   >
                     <FaFacebookF />
                   </a>
 
-                  {/* Instagram */}
                   <a
                     href="https://www.instagram.com/"
                     target="_blank"
+                    rel="noreferrer"
                     className="hover:text-[#D4AF37] transition"
                   >
                     <FaInstagram />
                   </a>
 
-                  {/* LinkedIn */}
                   <a
                     href="https://www.linkedin.com/company/softwallet-innovative-technologies-private-limited/"
                     target="_blank"
+                    rel="noreferrer"
                     className="hover:text-[#D4AF37] transition"
                   >
                     <FaLinkedinIn />
                   </a>
 
-                  {/* WhatsApp */}
                   <a
                     href="https://wa.me/919596393658"
                     target="_blank"
+                    rel="noreferrer"
                     className="hover:text-[#25D366] transition"
                   >
                     <FaWhatsapp />
@@ -430,7 +493,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* COPYRIGHT */}
             <div className="border-t border-white/20 mt-6 pt-4 text-center text-white/80 text-sm">
               © 2026 Softwallet Innovative Technologies | KashmirCraft
               Marketplace | All Rights Reserved.

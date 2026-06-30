@@ -548,7 +548,7 @@ export default function AdminPanel() {
         {/* VENDOR DETAILS MODAL */}
         {selectedVendor && (
           <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-5">
-            <div className="bg-white w-full max-w-5xl rounded-[32px] p-4 md:p-8"> max-h-[90vh] overflow-y-auto relative">
+            <div className="bg-white w-full max-w-5xl rounded-[32px] p-4 md:p-8 max-h-[90vh] overflow-y-auto relative">
               <button
                 onClick={() => setSelectedVendor(null)}
                 className="absolute top-5 right-5 bg-red-500 text-white px-4 py-2 rounded-xl"

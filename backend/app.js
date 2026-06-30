@@ -12,6 +12,9 @@ import userOrderRoutes from "./routes/user/orderRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import subscriberRoutes from "./routes/subscriberRoutes.js";
 
+// 🤖 AI ROUTES
+import aiRoutes from "./routes/aiRoutes.js";
+
 // ================= SELLER =================
 import sellerProductRoutes from "./routes/seller/productRoutes.js";
 import sellerDashboardRoutes from "./routes/seller/dashboardRoutes.js";
@@ -39,7 +42,7 @@ app.use(
       "https://ecommerce.softwalletinnovativetechnologies.cloud",
     ],
     credentials: true,
-  }),
+  })
 );
 
 app.use(express.json());
@@ -62,7 +65,11 @@ app.use("/api/user/orders", userOrderRoutes);
 
 // ================= PUBLIC PRODUCTS =================
 app.use("/api/products", productRoutes);
+
 app.use("/api/subscribers", subscriberRoutes);
+
+// ================= AI =================
+app.use("/api/ai", aiRoutes);
 
 // ================= SELLER =================
 app.use("/api/seller/products", protect, sellerProductRoutes);

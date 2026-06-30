@@ -1,0 +1,94 @@
+[
+  {
+    "keywords": ["hello", "hi", "hey", "assalam", "salam", "greet"],
+    "answer": "Assalamu Alaikum! 👋 Welcome to KashmirCraft! I'm here to help you with products, orders, shipping, and anything else. What can I help you with?"
+  },
+  {
+    "keywords": ["product", "sell", "available", "what do you sell", "items", "catalogue"],
+    "answer": "🛍️ We sell authentic Kashmiri handicrafts including:\n• Pashmina & Kashmiri Shawls\n• Hand-knotted Carpets & Rugs\n• Walnut Wood Carvings\n• Kashmiri Jewelry\n• Dry Fruits & Saffron\n• Papier-mâché items\nAll products are 100% original and handmade!"
+  },
+  {
+    "keywords": ["shawl", "pashmina", "kashmiri shawl", "wrap"],
+    "answer": "🧣 Our Kashmiri Shawls are hand-woven using pure Pashmina wool from the Kashmir valley. They are available in various designs including Sozni embroidery, Kani weave, and Jamawar patterns. Each shawl is a unique piece of art!"
+  },
+  {
+    "keywords": ["carpet", "rug", "handknotted", "hand knotted", "floor"],
+    "answer": "🪄 Our hand-knotted Kashmiri carpets are made by skilled artisans using pure wool and silk. They come in Persian and traditional Kashmiri designs. Each carpet can take months to complete and is a lifetime investment!"
+  },
+  {
+    "keywords": ["saffron", "kesar", "spice"],
+    "answer": "🌸 We offer pure Kashmiri Saffron (Kesar) — the world's finest saffron grown in Pampore, Kashmir. It is 100% natural with no additives. Available in various quantities."
+  },
+  {
+    "keywords": ["dry fruit", "dryfruits", "walnut", "almond", "nuts", "badam"],
+    "answer": "🌰 We offer premium Kashmiri dry fruits including Walnuts, Almonds, Apricots, and more. All are sourced directly from Kashmir valley farms — fresh, natural, and packed with nutrition."
+  },
+  {
+    "keywords": ["jewelry", "jewellery", "necklace", "earring", "ring", "pendant"],
+    "answer": "💎 Our Kashmiri jewelry collection features traditional designs with silver, stones, and enamel work. Perfect for gifting or personal use. Each piece reflects the rich cultural heritage of Kashmir."
+  },
+  {
+    "keywords": ["wood", "carving", "walnut wood", "wooden"],
+    "answer": "🪵 Our Walnut Wood Carvings are handcrafted by skilled artisans from Kashmir. Products include decorative boxes, frames, trays, and furniture pieces with intricate floral carvings."
+  },
+  {
+    "keywords": ["price", "cost", "how much", "rate", "cheap", "expensive", "affordable"],
+    "answer": "💰 Our prices vary by product and craftsmanship. Shawls start from ₹500, carpets from ₹2000, dry fruits from ₹200, and jewelry from ₹300. Visit our Shop page to see all current prices!"
+  },
+  {
+    "keywords": ["shipping", "delivery", "deliver", "ship", "how long", "days"],
+    "answer": "🚚 We offer delivery across India! Standard delivery takes 5-7 business days. Express delivery is available in select cities. You can track your order from your Orders page after purchase."
+  },
+  {
+    "keywords": ["track", "tracking", "order status", "where is my order", "my order"],
+    "answer": "📦 You can track your order by logging into your account and visiting the Orders section. You'll see real-time status: Placed → Shipped → Out for Delivery → Delivered."
+  },
+  {
+    "keywords": ["return", "refund", "exchange", "back", "cancel"],
+    "answer": "↩️ We have a 7-day return policy. If you receive a damaged or incorrect item, contact us within 7 days of delivery. Refunds are processed within 5-7 business days after we receive the returned item."
+  },
+  {
+    "keywords": ["payment", "pay", "upi", "card", "razorpay", "online payment", "cod"],
+    "answer": "💳 We accept all major payment methods including UPI, Credit/Debit Cards, Net Banking, and Wallets — all powered by Razorpay for secure transactions."
+  },
+  {
+    "keywords": ["seller", "sell", "become seller", "vendor", "shop", "register as seller"],
+    "answer": "🏪 Want to sell on KashmirCraft? Go to the Seller page and register your shop. You'll need to provide your Aadhaar, PAN, GST details, and bank account. Once approved by admin, you can start listing your products!"
+  },
+  {
+    "keywords": ["account", "login", "register", "signup", "sign up", "create account"],
+    "answer": "👤 You can create an account by clicking the Login/Register button on the top right. Registration is free and takes less than a minute. You can sign up as a Buyer or a Seller."
+  },
+  {
+    "keywords": ["contact", "support", "help", "customer care", "email", "phone"],
+    "answer": "📞 You can reach our support team through the Contact page on our website. We typically respond within 24 hours. You can also email us directly for any urgent queries."
+  },
+  {
+    "keywords": ["authentic", "original", "genuine", "real", "fake", "trust"],
+    "answer": "✅ All products on KashmirCraft are 100% authentic and sourced directly from verified Kashmiri artisans and vendors. Every seller goes through a verification process before being approved."
+  },
+  {
+    "keywords": ["gift", "gifting", "present", "occasion", "wedding", "festival"],
+    "answer": "🎁 KashmirCraft products make perfect gifts! We offer gift packaging on request. Popular gifting choices include Pashmina shawls, Saffron, Walnut boxes, and Jewelry sets."
+  },
+  {
+    "keywords": ["wishlist", "favourite", "favorite", "save", "saved"],
+    "answer": "❤️ You can add any product to your Wishlist by clicking the heart icon on the product. Access your saved items anytime from the Wishlist page in your account."
+  },
+  {
+    "keywords": ["cart", "add to cart", "basket", "checkout"],
+    "answer": "🛒 Add products to your cart and proceed to checkout when ready. You can update quantities or remove items from the cart before placing your order."
+  },
+  {
+    "keywords": ["kashmir", "about", "who are you", "kashmircraft", "company"],
+    "answer": "🏔️ KashmirCraft is a luxury marketplace dedicated to authentic Kashmiri handicrafts. We connect skilled artisans from the Kashmir valley directly with buyers across India, preserving centuries-old craft traditions."
+  },
+  {
+    "keywords": ["thanks", "thank you", "thankyou", "great", "awesome", "helpful"],
+    "answer": "😊 You're welcome! It's our pleasure to help. Feel free to ask anything else about our products or services. Happy shopping at KashmirCraft! 🛍️"
+  },
+  {
+    "keywords": ["bye", "goodbye", "see you", "later", "ok thanks"],
+    "answer": "👋 Thank you for visiting KashmirCraft! Have a wonderful day. Come back anytime — we'd love to help you find the perfect Kashmiri product! 🌸"
+  }
+]
